@@ -1,0 +1,4036 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kochbuch</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kochbuch">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f7f3ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16120f" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="./icon-192.png">
+<style>
+:root{--bg:#f7f3ec;--card:#fff;--ink:#2b2622;--mute:#7a6f66;--line:#e8e0d4;--acc:#d4501e;--acc-ink:#fff;--acc2:#fbe6dc;--ok:#2f8f5b;--warn:#b7791f;--r:16px}
+@media (prefers-color-scheme:dark){:root{--bg:#16120f;--card:#221c18;--ink:#f1ebe3;--mute:#a49a8f;--line:#352d27;--acc:#ff7a45;--acc-ink:#1a0f09;--acc2:#3a231a;--ok:#5cc58b;--warn:#e6b455}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;
+  padding-top:env(safe-area-inset-top);min-height:100vh}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+h1,h2,h3{margin:0;line-height:1.2}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px calc(96px + env(safe-area-inset-bottom))}
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  padding:12px 16px 10px;margin:0 -16px;border-bottom:1px solid transparent}
+header.top.scrolled{border-bottom-color:var(--line)}
+.title{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:6px 0 10px}
+.title small{font-size:14px;font-weight:600;color:var(--mute);margin-left:6px;letter-spacing:0}
+input[type=search],input[type=text]{width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);outline:none}
+input:focus{border-color:var(--acc)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:7px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--mute)}
+.chip.on{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.row{display:flex;align-items:center;gap:10px}
+.sp{flex:1}
+.sel{padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:14px}
+.list{display:grid;gap:12px;margin-top:12px}
+.card{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;position:relative}
+.card:active{transform:scale(.99)}
+.card h3{font-size:17px;font-weight:700;padding-right:34px}
+.meta{color:var(--mute);font-size:13px;margin-top:4px}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pill{font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--acc2);color:var(--acc)}
+.pill.g{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.pill.n{background:var(--line);color:var(--mute)}
+.heart{position:absolute;top:8px;right:8px;width:38px;height:38px;font-size:21px;line-height:38px;text-align:center;color:var(--mute)}
+.heart.on{color:#e0245e}
+.empty{text-align:center;color:var(--mute);padding:48px 12px}
+/* Tabbar */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;justify-content:center;background:color-mix(in srgb,var(--card) 94%,transparent);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs .in{display:flex;width:100%;max-width:720px}
+nav.tabs button{flex:1;padding:9px 0 8px;font-size:11.5px;font-weight:600;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
+nav.tabs button .ic{font-size:22px;line-height:1}
+nav.tabs button.on{color:var(--acc)}
+.badge{position:absolute;top:3px;left:calc(50% + 6px);background:var(--acc);color:var(--acc-ink);font-size:11px;min-width:18px;height:18px;border-radius:9px;line-height:18px;padding:0 5px}
+/* Detail */
+.back{display:inline-flex;align-items:center;gap:4px;color:var(--acc);font-weight:600;padding:8px 0}
+.dh{font-size:26px;font-weight:800;letter-spacing:-.02em;margin:4px 0 6px}
+.nut{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.nut div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 4px;text-align:center}
+.nut b{display:block;font-size:19px}
+.nut span{font-size:11.5px;color:var(--mute)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-top:14px}
+.box h2{font-size:17px;margin-bottom:8px}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg)}
+.stepper button{width:40px;height:38px;font-size:22px;color:var(--acc)}
+.stepper b{min-width:92px;text-align:center;font-size:15px}
+ul.ing{list-style:none;margin:0;padding:0}
+ul.ing li{border-top:1px solid var(--line)}
+ul.ing li:first-child{border-top:0}
+label.ck{display:flex;gap:12px;align-items:flex-start;padding:10px 0;cursor:pointer}
+label.ck input{appearance:none;-webkit-appearance:none;flex:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--line);margin:1px 0 0;background:var(--card);position:relative}
+label.ck input:checked{background:var(--acc);border-color:var(--acc)}
+label.ck input:checked::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid var(--acc-ink);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+label.ck.done span.t{text-decoration:line-through;color:var(--mute)}
+.est{color:var(--warn);font-weight:700;font-size:12px;margin-left:4px}
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;display:flex;gap:12px;padding:9px 0}
+ol.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--acc2);color:var(--acc);font-weight:800;font-size:13px;text-align:center;line-height:26px;margin-top:1px}
+.note{font-size:14px;color:var(--mute);margin-top:10px}
+.btn{display:block;width:100%;padding:14px;border-radius:14px;background:var(--acc);color:var(--acc-ink);font-weight:700;text-align:center;margin-top:14px;font-size:16px}
+.btn.sec{background:var(--card);color:var(--acc);border:1px solid var(--line)}
+.btn.sm{display:inline-block;width:auto;padding:9px 16px;margin:0;font-size:14px;white-space:nowrap}
+a{color:var(--acc)}
+.sec-h{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:20px 4px 6px}
+.qty{color:var(--mute);margin-left:auto;padding-left:10px;white-space:nowrap;font-size:14px}
+.small{font-size:13px;color:var(--mute)}
+.tagrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 8px 6px 12px;border-radius:999px;background:var(--acc2);color:var(--acc);font-weight:600;font-size:14px}
+.tag button{color:inherit;font-size:16px;line-height:1;padding:0 4px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--ok)}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;z-index:20;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav class="tabs"><div class="in" id="tabs"></div></nav>
+<div class="toast" id="toast"></div>
+
+<script>
+const RECIPES = [
+ {
+  "id": "r00",
+  "title": "Honey Garlic Beef (Meal Prep)",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "",
+  "creator": "@noahperlofit",
+  "source": "@noahperlofit (Instagram, https://www.instagram.com/reel/DfGAQz0By48/)",
+  "link": "https://www.instagram.com/reel/DfGAQz0By48/",
+  "original": "10 Portionen, ×0,4 umgerechnet",
+  "idea": "",
+  "nut": {
+   "kcal": 464,
+   "e": 46.0,
+   "kh": 29.0,
+   "f": 18.0,
+   "creator": "456 kcal · 47 g E · 28 g KH · 17,3 g F (ohne Reis)"
+  },
+  "ings": [
+   {
+    "raw": "800 g Flank Steak (pariert)",
+    "qty": 800.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Flank Steak (pariert)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "18 g Speisestärke",
+    "qty": 18.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Speisestärke",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "12 g Sojasauce",
+    "qty": 12.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Sojasauce",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 TL Olivenöl",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Olivenöl",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "¾ TL Knoblauchpulver",
+    "qty": 0.75,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Knoblauchpulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "¾ TL Pfeffer",
+    "qty": 0.75,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "¾ TL Salz",
+    "qty": 0.75,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "72 g Honig",
+    "qty": 72.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Honig",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "60 g Sojasauce (Sauce)",
+    "qty": 60.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Sojasauce (Sauce)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "40 g Sweet-Chili-Sauce (zuckerfrei)",
+    "qty": 40.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Sweet-Chili-Sauce (zuckerfrei)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "36 g Reisessig",
+    "qty": 36.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Reisessig",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "32 g brauner Zuckerersatz (Stevia)",
+    "qty": 32.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "brauner Zuckerersatz (Stevia)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "24 g Knoblauch, gehackt",
+    "qty": 24.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Knoblauch, gehackt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "14 g Ingwer, gehackt",
+    "qty": 14.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Ingwer, gehackt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "12 g Hoisin-Sauce",
+    "qty": 12.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hoisin-Sauce",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "10 g Speisestärke (zum Andicken)",
+    "qty": 10.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Speisestärke (zum Andicken)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "20 ml Wasser",
+    "qty": 20.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Wasser",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "12 g Sesam",
+    "qty": 12.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Sesam",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 Frühlingszwiebel",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Frühlingszwiebel",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Steak quer zur Faser in dünne Streifen schneiden.",
+   "Mit Speisestärke, Sojasauce, Öl, Knoblauchpulver, Pfeffer und Salz vermengen.",
+   "In einer heißen Pfanne portionsweise scharf anbraten.",
+   "Honig, Sojasauce, Sweet-Chili, Reisessig, Zuckerersatz, Knoblauch, Ingwer und Hoisin verrühren, zum Fleisch geben und einkochen.",
+   "Bei Bedarf mit der Stärke-Wasser-Mischung andicken.",
+   "Mit Sesam und Frühlingszwiebeln bestreuen, in Gläser füllen (hält gefroren mehrere Wochen)."
+  ],
+  "stepsNote": "aus Video abgeleitet",
+  "note": "Chiliflocken weggelassen (nicht scharf)."
+ },
+ {
+  "id": "r01",
+  "title": "Cremiger Spätzle-Gemüse-Auflauf",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Cremige Spätzle mit Hähnchen",
+  "creator": "@protein_tobi",
+  "source": "@protein_tobi (Instagram, https://www.instagram.com/reel/DeE2kmeTZPf/)",
+  "link": "https://www.instagram.com/reel/DeE2kmeTZPf/",
+  "original": "4 Portionen",
+  "idea": "",
+  "nut": {
+   "kcal": 537,
+   "e": 50.0,
+   "kh": 54.0,
+   "f": 12.0,
+   "creator": "400 kcal · 23 g E · 52 g KH · 11 g F"
+  },
+  "ings": [
+   {
+    "raw": "500 g frische Spätzle (Kühlregal)",
+    "qty": 500.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "frische Spätzle (Kühlregal)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 kg Kaisergemüse (TK)",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "kg",
+    "name": "Kaisergemüse (TK)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 g Hähnchen-Innenfilet",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hähnchen-Innenfilet",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g Kräuter-Frischkäse 0,2 %",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Kräuter-Frischkäse 0,2 %",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "250 ml Kochsahne 7 %",
+    "qty": 250.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Kochsahne 7 %",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "60 g Reibekäse light",
+    "qty": 60.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Reibekäse light",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 ml Gemüsebrühe",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Gemüsebrühe",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 EL Tomatenmark",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Tomatenmark",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 TL Paprikapulver",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Paprikapulver",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Backofen auf 200 °C Ober-/Unterhitze vorheizen.",
+   "Spätzle und gefrorenes Kaisergemüse auf einem Backblech oder in einer großen Auflaufform verteilen, Hähnchen-Innenfilets darauflegen.",
+   "Kochsahne, Frischkäse, Gemüsebrühe und Tomatenmark verrühren und darübergießen. Mit Salz, Pfeffer und Paprika würzen.",
+   "Reibekäse darüber verteilen und ca. 45 Minuten backen, bis der Käse goldbraun ist."
+  ],
+  "stepsNote": "",
+  "note": ""
+ },
+ {
+  "id": "r02",
+  "title": "Pizza-Wrap (Low Carb)",
+  "cats": [
+   "Abend"
+  ],
+  "group": "Protein-Pizza ohne Hefeteig",
+  "creator": "@marcelfulsche",
+  "source": "@marcelfulsche (Instagram, https://www.instagram.com/reel/DdSB7fSoJtH/)",
+  "link": "https://www.instagram.com/reel/DdSB7fSoJtH/",
+  "original": "1 Blech (≈ 2 Portionen), verdoppelt",
+  "idea": "",
+  "nut": {
+   "kcal": 421,
+   "e": 41.0,
+   "kh": 7.0,
+   "f": 25.0,
+   "creator": ""
+  },
+  "ings": [
+   {
+    "raw": "6 Eier (ca. 330 g)",
+    "qty": 6.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier (ca. 330 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "600 g körniger Frischkäse",
+    "qty": 600.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "körniger Frischkäse",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 Prisen Salz",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "Prisen",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g Pizzatomaten",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Pizzatomaten",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "100 g geriebener Light-Käse",
+    "qty": 100.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "geriebener Light-Käse",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "80 g Salami",
+    "qty": 80.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Salami",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "frischer Basilikum",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "frischer Basilikum",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Backofen auf 160 °C vorheizen. Eier, körnigen Frischkäse und Salz im Mixer glatt pürieren.",
+   "Masse auf zwei mit Backpapier belegte Bleche dünn verteilen und ca. 15 Minuten vorbacken.",
+   "Mit Pizzatomaten bestreichen, mit Käse und Salami belegen und weitere 5 Minuten backen, bis der Käse geschmolzen ist.",
+   "Mit Basilikum toppen, zusammenklappen und genießen."
+  ],
+  "stepsNote": "",
+  "note": "Mengen für den Belag fehlten im Original und sind geschätzt."
+ },
+ {
+  "id": "r03",
+  "title": "Italienische Bolognese",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "",
+  "creator": "@fitaliancook",
+  "source": "@fitaliancook (Instagram, https://www.instagram.com/reel/De4O5H4oYlf/)",
+  "link": "https://www.instagram.com/reel/De4O5H4oYlf/",
+  "original": "12–16 Portionen, auf 4 umgerechnet (÷3,5)",
+  "idea": "",
+  "nut": {
+   "kcal": 499,
+   "e": 32.0,
+   "kh": 14.0,
+   "f": 35.0,
+   "creator": ""
+  },
+  "ings": [
+   {
+    "raw": "570 g Rinderhack",
+    "qty": 570.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Rinderhack",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "57 g Pancetta oder Schinkenspeck",
+    "qty": 57.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Pancetta oder Schinkenspeck",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "115 g Staudensellerie (ca. 3 Stangen)",
+    "qty": 115.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Staudensellerie (ca. 3 Stangen)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 Möhren (ca. 160 g)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Möhren (ca. 160 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ weiße Zwiebel (ca. 50 g)",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "",
+    "name": "weiße Zwiebel (ca. 50 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "60 ml Gemüsebrühe (optional)",
+    "qty": 60.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Gemüsebrühe (optional)",
+    "est": false,
+    "opt": true
+   },
+   {
+    "raw": "2 EL Tomatenmark",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Tomatenmark",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "285 ml Milch",
+    "qty": 285.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Milch",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "345 g Dosentomaten oder 400 ml Passata",
+    "qty": 345.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Dosentomaten oder 400 ml Passata",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 Lorbeerblatt",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Lorbeerblatt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 TL Salz",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Schuss Rotwein (optional)",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Schuss Rotwein (optional)",
+    "est": false,
+    "opt": true
+   }
+  ],
+  "steps": [
+   "Sellerie, Möhren und Zwiebel sehr fein hacken (am einfachsten im Multizerkleinerer), Pancetta in kleine Würfel schneiden.",
+   "Einen großen Topf auf mittlerer Stufe erhitzen und die Pancetta darin langsam goldbraun auslassen.",
+   "Das gehackte Gemüse dazugeben und 30 Minuten anschwitzen (Soffritto). Wird es zu trocken, etwas Brühe angießen, nichts anbrennen lassen.",
+   "Hitze erhöhen, Hack dazugeben und unter Rühren krümelig garen (nicht scharf anbraten).",
+   "Tomatenmark einrühren, Milch angießen und aufkochen. Tomaten dazugeben und nochmals aufkochen.",
+   "Salz und Lorbeer dazugeben, Hitze reduzieren und 1,5 bis 2 Stunden mit leicht geöffnetem Deckel köcheln lassen.",
+   "Mit Salz und Pfeffer abschmecken. Mit al dente Pasta und etwas Pastawasser in der Pfanne vermengen oder portionsweise einfrieren."
+  ],
+  "stepsNote": "",
+  "note": "Zwiebeln von umgerechnet ca. 140 g auf 50 g reduziert (wenig Zwiebel). Rotwein optional, nicht in den Nährwerten."
+ },
+ {
+  "id": "r04",
+  "title": "Mais-Wrap 2.0 mit Hähnchen",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Mais-Wrap",
+  "creator": "@abbasmomo",
+  "source": "@abbasmomo (Instagram, https://www.instagram.com/reel/Dd6jX8Fobae/)",
+  "link": "https://www.instagram.com/reel/Dd6jX8Fobae/",
+  "original": "1 großer Wrap (≈ 2 Portionen), verdoppelt",
+  "idea": "",
+  "nut": {
+   "kcal": 602,
+   "e": 60.0,
+   "kh": 33.0,
+   "f": 26.0,
+   "creator": ""
+  },
+  "ings": [
+   {
+    "raw": "2 Dosen Mais (je 285 g abgetropft)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "Dosen",
+    "name": "Mais (je 285 g abgetropft)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g geriebener Käse (davon etwas zum Bestreuen)",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "geriebener Käse (davon etwas zum Bestreuen)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 Eier",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 EL Speisestärke",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Speisestärke",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "600 g Hähnchenbrust in Streifen",
+    "qty": 600.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hähnchenbrust in Streifen",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "4 EL BBQ- oder Teriyaki-Sauce",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "BBQ- oder Teriyaki-Sauce",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "Paprikapulver",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Paprikapulver",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "Salat nach Wahl",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salat nach Wahl",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "1 EL Öl",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Öl",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Backofen auf 200 °C vorheizen. Mais gut abtropfen lassen.",
+   "Mais mit dem Großteil des Käses, Eiern und Speisestärke vermengen.",
+   "Auf zwei mit Backpapier belegten Blechen flach verteilen, restlichen Käse darüberstreuen und ca. 20–25 Minuten goldbraun backen.",
+   "Hähnchenstreifen mit Paprika würzen, in Öl anbraten und mit der Sauce glasieren.",
+   "Teig kurz abkühlen lassen, mit Salat und Hähnchen belegen und fest einrollen."
+  ],
+  "stepsNote": "aus Video abgeleitet",
+  "note": "Kein Rezept in der Beschreibung: Mais, Eier, Käse und Salat wie beim XXL Thunfisch-Mais-Wrap übernommen, Füllung aus dem Video geschätzt. Sriracha (scharf) durch BBQ- oder Teriyaki-Sauce ersetzt."
+ },
+ {
+  "id": "r05",
+  "title": "Knusprige Hackfleisch-Käse-Wraps mit Avocado-Dip",
+  "cats": [
+   "Abend"
+  ],
+  "group": "",
+  "creator": "@feedme_daily",
+  "source": "@feedme_daily (Instagram, https://www.instagram.com/reel/Dd9UHhGKh_y/)",
+  "link": "https://www.instagram.com/reel/Dd9UHhGKh_y/",
+  "original": "4 Wraps",
+  "idea": "",
+  "nut": {
+   "kcal": 643,
+   "e": 31.0,
+   "kh": 39.0,
+   "f": 41.0,
+   "creator": ""
+  },
+  "ings": [
+   {
+    "raw": "300 g Rinderhack",
+    "qty": 300.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Rinderhack",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ Zwiebel",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "",
+    "name": "Zwiebel",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 Knoblauchzehen",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Knoblauchzehen",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 ml stückige Tomaten mit Kräutern",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "stückige Tomaten mit Kräutern",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Paprika edelsüß",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Paprika edelsüß",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Oregano",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Oregano",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g geriebener Mozzarella",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "geriebener Mozzarella",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 Weizen-Tortillas",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Weizen-Tortillas",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "etwas Öl zum Braten",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "etwas Öl zum Braten",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "1 Avocado",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Avocado",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 EL griechischer Joghurt",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "griechischer Joghurt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ Bund Koriander oder Petersilie",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "Bund",
+    "name": "Koriander oder Petersilie",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Saft einer ½ Zitrone",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Saft einer ½ Zitrone",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "etwas Cumin",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "etwas Cumin",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Rinderhack in einer heißen Pfanne mit etwas Öl scharf anbraten. Gehackte Zwiebel und Knoblauch in Scheiben dazugeben und 4–5 Minuten mitbraten.",
+   "Stückige Tomaten und einen Schuss Wasser dazugeben, würzen, Deckel auflegen und ca. 20 Minuten bei mittlerer Hitze köcheln. Etwas abkühlen lassen.",
+   "Tortillas mit Hackfüllung und Mozzarella belegen, Seiten einklappen und fest aufrollen.",
+   "Wraps in einer Pfanne mit etwas Öl rundum goldbraun und knusprig braten.",
+   "Für den Dip Avocado, Joghurt, Kräuter und Zitronensaft pürieren, mit Salz, Pfeffer und Cumin abschmecken."
+  ],
+  "stepsNote": "",
+  "note": "Chili weggelassen (nicht scharf). Zwiebel halbiert (wenig Zwiebel)."
+ },
+ {
+  "id": "r06",
+  "title": "Kartoffel-Omelett mit Käse",
+  "cats": [
+   "Frühstück"
+  ],
+  "group": "",
+  "creator": "@kubratalaay",
+  "source": "@kubratalaay (Instagram, https://www.instagram.com/reel/DeCoukSqs_G/)",
+  "link": "https://www.instagram.com/reel/DeCoukSqs_G/",
+  "original": "1 Kartoffel + 3 Eier (≈ 2 Portionen), verdoppelt",
+  "idea": "",
+  "nut": {
+   "kcal": 308,
+   "e": 19.0,
+   "kh": 18.0,
+   "f": 18.0,
+   "creator": ""
+  },
+  "ings": [
+   {
+    "raw": "2 große Kartoffeln (ca. 400 g)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "große Kartoffeln (ca. 400 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "6 Eier",
+    "qty": 6.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "100 g Kaşar-Käse oder junger Gouda, gerieben",
+    "qty": 100.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Kaşar-Käse oder junger Gouda, gerieben",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "einige Stängel Petersilie",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "einige Stängel Petersilie",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Gewürze nach Wahl (optional)",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Gewürze nach Wahl (optional)",
+    "est": false,
+    "opt": true
+   },
+   {
+    "raw": "1 EL Öl",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Öl",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Kartoffeln schälen und mit dem Sparschäler in dünnen Streifen direkt in eine geölte Pfanne hobeln.",
+   "Bei mittlerer Hitze anbraten, bis sie weich und leicht gebräunt sind.",
+   "Eier mit gehackter Petersilie und Salz verquirlen und über die Kartoffeln gießen.",
+   "Stocken lassen, Käse darüberstreuen, zusammenklappen bzw. wenden und goldbraun braten."
+  ],
+  "stepsNote": "aus Video abgeleitet",
+  "note": "Käsemenge war nicht angegeben und ist geschätzt. Zubereitung aus dem Video abgeleitet (türkisches Original)."
+ },
+ {
+  "id": "r07",
+  "title": "XXL Thunfisch-Mais-Wrap",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Mais-Wrap",
+  "creator": "@fitness.compani0n",
+  "source": "@fitness.compani0n (Instagram, https://www.instagram.com/reel/DbstfyJossK/)",
+  "link": "https://www.instagram.com/reel/DbstfyJossK/",
+  "original": "1 Wrap (≈ 2 Portionen), verdoppelt",
+  "idea": "@abbasmomo",
+  "nut": {
+   "kcal": 454,
+   "e": 45.0,
+   "kh": 24.0,
+   "f": 19.0,
+   "creator": "883 kcal · 82 g E · 44,5 g KH · 39 g F (ganzer Wrap)"
+  },
+  "ings": [
+   {
+    "raw": "2 Dosen Mais (je 285 g abgetropft)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "Dosen",
+    "name": "Mais (je 285 g abgetropft)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 Eier",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g Light-Käse, gerieben",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Light-Käse, gerieben",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "300 g Thunfisch im eigenen Saft",
+    "qty": 300.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Thunfisch im eigenen Saft",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "50 g Light-Mayonnaise",
+    "qty": 50.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Light-Mayonnaise",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ kleine rote Zwiebel",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "",
+    "name": "kleine rote Zwiebel",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salat nach Wahl",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salat nach Wahl",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Backofen auf 180 °C Umluft vorheizen. Mais, Eier und Light-Käse vermengen, mit Pfeffer würzen.",
+   "Auf zwei mit Backpapier belegten Blechen verstreichen, mit etwas Käse bestreuen und ca. 25 Minuten backen.",
+   "Währenddessen Thunfisch, Light-Mayonnaise und fein gewürfelte rote Zwiebel zu einer cremigen Creme verrühren.",
+   "Gebackenen Maiswrap etwas abkühlen lassen, mit Salat und Thunfischcreme belegen.",
+   "Fest zusammenrollen, anschneiden und genießen."
+  ],
+  "stepsNote": "",
+  "note": "Rote Zwiebel halbiert (wenig Zwiebel)."
+ },
+ {
+  "id": "r08",
+  "title": "Cremige One-Pot Schwaben-Pfanne",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Cremige Spätzle mit Hähnchen",
+  "creator": "@inas.fitblog",
+  "source": "@inas.fitblog (Instagram, https://www.instagram.com/reel/DeebH6VtqOO/)",
+  "link": "https://www.instagram.com/reel/DeebH6VtqOO/",
+  "original": "4 Portionen",
+  "idea": "",
+  "nut": {
+   "kcal": 492,
+   "e": 48.0,
+   "kh": 45.0,
+   "f": 13.0,
+   "creator": "475 kcal · 44 g E · 45 g KH · 11 g F"
+  },
+  "ings": [
+   {
+    "raw": "600 g Hähnchenbrust",
+    "qty": 600.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hähnchenbrust",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "500 g frische Spätzle (Kühlregal)",
+    "qty": 500.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "frische Spätzle (Kühlregal)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 große Zwiebel",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "",
+    "name": "große Zwiebel",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g Kochsahne light (7 %)",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Kochsahne light (7 %)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "150 g Frischkäse light",
+    "qty": 150.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Frischkäse light",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "etwas Öl oder Ölspray",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "etwas Öl oder Ölspray",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Zwiebelpulver",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Zwiebelpulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Petersilie",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Petersilie",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Hähnchen in mundgerechte Stücke schneiden, mit Salz, Pfeffer und Zwiebelpulver würzen und in einer großen Pfanne mit etwas Öl goldbraun anbraten.",
+   "Zwiebel in feine Streifen schneiden, dazugeben und bei mittlerer Hitze weich und leicht karamellisiert braten.",
+   "Frische Spätzle dazugeben und kurz mitbraten.",
+   "Kochsahne und Frischkäse einrühren, einige Minuten köcheln lassen, bei Bedarf einen Schuss Wasser dazugeben.",
+   "Mit Salz, Pfeffer und frischer Petersilie abschmecken."
+  ],
+  "stepsNote": "",
+  "note": "Zwiebeln von 4 großen auf 1 reduziert (wenig Zwiebel)."
+ },
+ {
+  "id": "r09",
+  "title": "Brokkoli-Hack-Nudelauflauf",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Hack-Nudel-Auflauf",
+  "creator": "@protein_tobi",
+  "source": "@protein_tobi (Instagram, https://www.instagram.com/reel/DewwotTzLHP/)",
+  "link": "https://www.instagram.com/reel/DewwotTzLHP/",
+  "original": "5 Portionen, ×0,8 umgerechnet",
+  "idea": "",
+  "nut": {
+   "kcal": 540,
+   "e": 34.0,
+   "kh": 68.0,
+   "f": 14.0,
+   "creator": "500 kcal · 33 g E · 67 g KH · 10 g F"
+  },
+  "ings": [
+   {
+    "raw": "320 g kurze Makkaroni (roh)",
+    "qty": 320.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "kurze Makkaroni (roh)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "320 g fettreduziertes Rinderhack",
+    "qty": 320.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "fettreduziertes Rinderhack",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ Zwiebel",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "",
+    "name": "Zwiebel",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1½ EL Tomatenmark",
+    "qty": 1.5,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Tomatenmark",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 ml passierte Tomaten",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "passierte Tomaten",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "560 ml Wasser",
+    "qty": 560.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Wasser",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "80 g Frischkäse light",
+    "qty": 80.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Frischkäse light",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "320 g TK-Brokkoli, aufgetaut",
+    "qty": 320.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "TK-Brokkoli, aufgetaut",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "32 g Mozzarella, gerieben",
+    "qty": 32.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Mozzarella, gerieben",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Ölspray",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Ölspray",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "¾ EL Gemüsebrühe (Pulver)",
+    "qty": 0.75,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Gemüsebrühe (Pulver)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "italienische Kräuter",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "italienische Kräuter",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Backofen auf 200 °C Ober-/Unterhitze vorheizen. Zwiebel würfeln und in einer großen Pfanne mit Ölspray anbraten.",
+   "Tomatenmark kurz mitrösten, Hack dazugeben, krümelig anbraten und mit Salz, Pfeffer, Brühe und Kräutern würzen.",
+   "Passierte Tomaten, Wasser und Frischkäse einrühren und alles einmal aufkochen.",
+   "Ungekochte Nudeln in eine Auflaufform geben, die flüssige Soße darübergießen und umrühren. Brokkoli und Mozzarella darauf verteilen.",
+   "Ca. 45 Minuten backen, bis die Nudeln gar sind und der Käse goldbraun ist."
+  ],
+  "stepsNote": "",
+  "note": "Zwiebel halbiert (wenig Zwiebel)."
+ },
+ {
+  "id": "r10",
+  "title": "Chicken Tenders aus dem Airfryer",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "",
+  "creator": "@meal.assassin",
+  "source": "@meal.assassin (Instagram, https://www.instagram.com/reel/Dee7iYVx3SX/)",
+  "link": "https://www.instagram.com/reel/Dee7iYVx3SX/",
+  "original": "keine Angabe",
+  "idea": "",
+  "nut": {
+   "kcal": 355,
+   "e": 43.0,
+   "kh": 28.0,
+   "f": 7.0,
+   "creator": ""
+  },
+  "ings": [
+   {
+    "raw": "600 g Hähnchen-Innenfilets",
+    "qty": 600.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hähnchen-Innenfilets",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "40 g Mehl",
+    "qty": 40.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Mehl",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "1 TL Paprikapulver",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Paprikapulver",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "1 TL Knoblauchpulver",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Knoblauchpulver",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 Eier",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "100 g Panko oder zerbröselte Cornflakes",
+    "qty": 100.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Panko oder zerbröselte Cornflakes",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "Ölspray",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Ölspray",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Hähnchen mit Mehl, Paprika, Knoblauchpulver, Salz und Pfeffer in einer Box bestäuben.",
+   "Durch die verquirlten Eier ziehen.",
+   "In Panko oder Cornflakes-Bröseln wenden und gut andrücken.",
+   "Mit Ölspray besprühen und im Airfryer bei 200 °C ca. 12–15 Minuten goldbraun garen, nach der Hälfte wenden."
+  ],
+  "stepsNote": "aus Video abgeleitet",
+  "note": "Kein Rezept in der Beschreibung: Zutaten und Mengen aus dem Video geschätzt."
+ },
+ {
+  "id": "r11",
+  "title": "Tex-Mex-Reispfanne",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "",
+  "creator": "@max_makros",
+  "source": "@max_makros (Instagram, https://www.instagram.com/reel/DecpSFoxhTc/)",
+  "link": "https://www.instagram.com/reel/DecpSFoxhTc/",
+  "original": "1 Pfanne (≈ 2 Portionen), verdoppelt",
+  "idea": "",
+  "nut": {
+   "kcal": 511,
+   "e": 41.0,
+   "kh": 58.0,
+   "f": 13.0,
+   "creator": "614 kcal · 62 g E · 40 g KH · 20 g F (laut Creator für die ganze Pfanne)"
+  },
+  "ings": [
+   {
+    "raw": "400 g Light-Hack",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Light-Hack",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "160 g Reis (roh)",
+    "qty": 160.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Reis (roh)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 rote Zwiebel",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "",
+    "name": "rote Zwiebel",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 Dose Mais (abgetropft)",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "Dose",
+    "name": "Mais (abgetropft)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 Dose Kidneybohnen (abgetropft)",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "Dose",
+    "name": "Kidneybohnen (abgetropft)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 ml Gemüsebrühe",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Gemüsebrühe",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 g gehackte Tomaten",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "gehackte Tomaten",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "120 g Light-Käse, gerieben",
+    "qty": 120.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Light-Käse, gerieben",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Paprika edelsüß",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Paprika edelsüß",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "etwas Öl",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "etwas Öl",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Zwiebel würfeln und in einer großen Pfanne anbraten.",
+   "Hack dazugeben, krümelig braten und mit Salz und Paprika würzen.",
+   "Reis roh dazugeben, Brühe und gehackte Tomaten angießen und zugedeckt ca. 15–20 Minuten garen, bis der Reis weich ist.",
+   "Mais und Kidneybohnen unterheben.",
+   "Light-Käse darüberstreuen und mit Deckel schmelzen lassen."
+  ],
+  "stepsNote": "aus Video abgeleitet",
+  "note": "Rote Zwiebeln von 2 auf 1 reduziert (wenig Zwiebel). Die Creator-Angabe (614 kcal für die ganze Pfanne) passt nicht zu den Zutaten: allein 80 g Reis liefern schon ca. 62 g Kohlenhydrate. Eine Pfanne reicht realistisch für 2 Portionen."
+ },
+ {
+  "id": "r12",
+  "title": "Lasagnesuppe",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "",
+  "creator": "@abbasmomo",
+  "source": "@abbasmomo (Instagram, https://www.instagram.com/reel/DerjPm0ImnU/)",
+  "link": "https://www.instagram.com/reel/DerjPm0ImnU/",
+  "original": "keine Angabe (≈ 4 Portionen)",
+  "idea": "",
+  "nut": {
+   "kcal": 872,
+   "e": 40.0,
+   "kh": 68.0,
+   "f": 49.0,
+   "creator": ""
+  },
+  "ings": [
+   {
+    "raw": "300 g Lasagneblätter",
+    "qty": 300.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Lasagneblätter",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "500 g Hackfleisch",
+    "qty": 500.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hackfleisch",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "700 ml Gemüsebrühe",
+    "qty": 700.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Gemüsebrühe",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 ml Sahne",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Sahne",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 Packung passierte Tomaten (500 g)",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "Packung",
+    "name": "passierte Tomaten (500 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "3 EL Tomatenmark",
+    "qty": 3.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Tomatenmark",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 kleine Zwiebel",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "",
+    "name": "kleine Zwiebel",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 Knoblauchzehen",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Knoblauchzehen",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "50–100 g geriebener Mozzarella",
+    "qty": 50.0,
+    "qty2": 100.0,
+    "unit": "g",
+    "name": "geriebener Mozzarella",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 Bund Petersilie",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "Bund",
+    "name": "Petersilie",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Oregano",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Oregano",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Paprikapulver",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Paprikapulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 EL Olivenöl",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Olivenöl",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Öl im Topf erhitzen, Hackfleisch krümelig anbraten.",
+   "Gewürfelte Zwiebel und Knoblauch dazugeben und kurz mitbraten, Tomatenmark anrösten.",
+   "Brühe und passierte Tomaten angießen, mit Oregano, Paprika, Salz und Pfeffer würzen und aufkochen.",
+   "Lasagneblätter in Stücke brechen, dazugeben und ca. 10–12 Minuten köcheln, bis sie gar sind.",
+   "Sahne und gehackte Petersilie einrühren, Mozzarella darüberstreuen und schmelzen lassen."
+  ],
+  "stepsNote": "aus Video abgeleitet",
+  "note": "Chiliflocken weggelassen (nicht scharf). Tipp: Mit Kochsahne 7 % statt Sahne und Light-Hack sparst du ca. 250 kcal pro Portion."
+ },
+ {
+  "id": "r13",
+  "title": "Korean Popcorn Chicken (mild)",
+  "cats": [
+   "Abend"
+  ],
+  "group": "",
+  "creator": "@proteinprepper",
+  "source": "@proteinprepper (Original: recipeincaption) (Instagram, https://www.instagram.com/reel/De4MJfIteLh/)",
+  "link": "https://www.instagram.com/reel/De4MJfIteLh/",
+  "original": "recipeincaption) (Instagram, https://www.instagram.com/reel/De4MJfIteLh/) · Original: 2 lb Hähnchen (≈ 4 Portionen)",
+  "idea": "",
+  "nut": {
+   "kcal": 613,
+   "e": 51.0,
+   "kh": 38.0,
+   "f": 28.0,
+   "creator": ""
+  },
+  "ings": [
+   {
+    "raw": "900 g Hähnchenschenkel oder -brust, in 2,5-cm-Würfeln",
+    "qty": 900.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hähnchenschenkel oder -brust, in 2,5-cm-Würfeln",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 Eier",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 EL Reisessig",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Reisessig",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "6 Knoblauchzehen, gehackt",
+    "qty": 6.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Knoblauchzehen, gehackt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 EL frischer Ingwer, gerieben",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "frischer Ingwer, gerieben",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 TL Knoblauchpulver",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Knoblauchpulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 TL Zwiebelpulver",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Zwiebelpulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 TL Salz",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 TL Pfeffer",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "32 g Speisestärke (¼ Cup)",
+    "qty": 32.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Speisestärke (¼ Cup)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "60 g Mehl (½ Cup)",
+    "qty": 60.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Mehl (½ Cup)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 EL Öl zum Einpinseln (Airfryer)",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Öl zum Einpinseln (Airfryer)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ EL Gochujang",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Gochujang",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 TL Sesam",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Sesam",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 EL Ketchup",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Ketchup",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 Knoblauchzehen (Sauce)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Knoblauchzehen (Sauce)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1½ EL Honig",
+    "qty": 1.5,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Honig",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "3 EL Butter",
+    "qty": 3.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Butter",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 EL Reisessig (Sauce)",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Reisessig (Sauce)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 EL Sojasauce",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Sojasauce",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 TL Sesamöl",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Sesamöl",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Frühlingszwiebeln zum Garnieren",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Frühlingszwiebeln zum Garnieren",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Hähnchen mit Eiern, Reisessig, Knoblauch, Ingwer und Gewürzen vermengen und marinieren (ideal 1 Stunde, 1 Minute geht auch).",
+   "Stärke und Mehl in einer separaten Schüssel mischen, Hähnchenstücke darin wenden und leicht andrücken.",
+   "Airfryer-Korb einölen, Hähnchen einpinseln und bei 190 °C 8 Minuten garen, wenden, weitere 6–8 Minuten knusprig garen. Portionsweise arbeiten. (Alternativ in Öl bei 175 °C 7–8 Minuten frittieren.)",
+   "Für die Sauce Gochujang, Ketchup, Sesam, Knoblauch, Honig, Reisessig, Sojasauce und Sesamöl in einer Pfanne bei mittlerer bis niedriger Hitze aufköcheln, Butter einrühren.",
+   "Hähnchen in der Sauce schwenken.",
+   "Auf Jasminreis servieren, mit Sesam und Frühlingszwiebeln garnieren."
+  ],
+  "stepsNote": "",
+  "note": "Mild gemacht: Gochujang von 1½ EL auf ½ EL reduziert, dafür 1 EL mehr Ketchup, Gochugaru weggelassen. Airfryer-Variante als Standard (Frittieren geht auch)."
+ },
+ {
+  "id": "r14",
+  "title": "Kräuterfrischkäse-Hähnchen-Orzo-Auflauf",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Ofen-Pasta mit Frischkäse oder Feta",
+  "creator": "@mfreimannfitness",
+  "source": "@mfreimannfitness (Original: adamhoad_coaching) (Instagram, https://www.instagram.com/reel/Db8aWW6ie1c/)",
+  "link": "https://www.instagram.com/reel/Db8aWW6ie1c/",
+  "original": "adamhoad_coaching) (Instagram, https://www.instagram.com/reel/Db8aWW6ie1c/) · Original: 4 Portionen",
+  "idea": "",
+  "nut": {
+   "kcal": 477,
+   "e": 36.0,
+   "kh": 44.0,
+   "f": 18.0,
+   "creator": "510 kcal · 37 g E · 46 g KH · 21 g F"
+  },
+  "ings": [
+   {
+    "raw": "300 g gegartes Hähnchen, zerpflückt",
+    "qty": 300.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "gegartes Hähnchen, zerpflückt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "180 g Orzo (trocken)",
+    "qty": 180.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Orzo (trocken)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "800 g Cherrytomaten",
+    "qty": 800.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Cherrytomaten",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 g Zucchini, gewürfelt",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Zucchini, gewürfelt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "125 g Kräuterfrischkäse (Knoblauch & Kräuter)",
+    "qty": 125.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Kräuterfrischkäse (Knoblauch & Kräuter)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "60 g Parmesan, frisch gerieben",
+    "qty": 60.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Parmesan, frisch gerieben",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 TL Oregano",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Oregano",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 ml Olivenöl(spray)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Olivenöl(spray)",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Backofen auf 180 °C Umluft vorheizen. Kräuterfrischkäse mittig in eine Auflaufform setzen, Cherrytomaten und Zucchini rundherum verteilen.",
+   "Würzen und mit etwas Olivenölspray besprühen.",
+   "35 Minuten backen, bis das Gemüse weich und leicht geröstet ist.",
+   "Währenddessen Orzo nach Packungsanweisung bissfest kochen und abgießen.",
+   "Form herausnehmen, Frischkäse mit dem Gemüse zu einer cremigen Sauce verrühren.",
+   "Hähnchen und Orzo unterheben.",
+   "Mit Parmesan bestreuen und nochmals 5 Minuten überbacken."
+  ],
+  "stepsNote": "",
+  "note": "Chiliflocken weggelassen (nicht scharf)."
+ },
+ {
+  "id": "r15",
+  "title": "Gefüllte Kartoffeln aus der Mikrowelle",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "",
+  "creator": "@tanjamari_",
+  "source": "@tanjamari_ (Instagram, https://www.instagram.com/reel/DeE5X0cIQH2/)",
+  "link": "https://www.instagram.com/reel/DeE5X0cIQH2/",
+  "original": "1 Portion, ×4",
+  "idea": "",
+  "nut": {
+   "kcal": 515,
+   "e": 39.0,
+   "kh": 64.0,
+   "f": 12.0,
+   "creator": "485 kcal · 38 g E · 53 g KH · 12 g F"
+  },
+  "ings": [
+   {
+    "raw": "12 Kartoffeln (ca. 1,4 kg)",
+    "qty": 12.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Kartoffeln (ca. 1,4 kg)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 g Hackfleisch (5 % Fett)",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hackfleisch (5 % Fett)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 g gehackte Tomaten mit Basilikum",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "gehackte Tomaten mit Basilikum",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Kreuzkümmel",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Kreuzkümmel",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Knoblauch",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Knoblauch",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 EL saure Sahne",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "saure Sahne",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "120 g leichter Käse",
+    "qty": 120.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "leichter Käse",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Kartoffeln einstechen, in eine mikrowellengeeignete Form legen und etwas Wasser dazugeben. Bei 800 Watt ca. 8 Minuten garen, bis sie weich sind (bei 4 Portionen in Etappen).",
+   "Währenddessen Hack anbraten, Tomaten und Gewürze dazugeben und kurz köcheln.",
+   "Kartoffeln einschneiden, mit der Hack-Tomaten-Mischung füllen und je einen Klecks saure Sahne daraufgeben.",
+   "Mit Käse bestreuen und nochmals in die Mikrowelle stellen, bis der Käse geschmolzen ist. Vorsicht beim Öffnen: heißer Dampf."
+  ],
+  "stepsNote": "",
+  "note": ""
+ },
+ {
+  "id": "r16",
+  "title": "One-Pot High-Protein-Orzo aus dem Ofen",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Ofen-Pasta mit Frischkäse oder Feta",
+  "creator": "@gymaex",
+  "source": "@gymaex (Rezept: stefanozarrella) (Instagram, https://www.instagram.com/reel/Dee1INHNv1Q/)",
+  "link": "https://www.instagram.com/reel/Dee1INHNv1Q/",
+  "original": "4 Portionen",
+  "idea": "",
+  "nut": {
+   "kcal": 587,
+   "e": 48.0,
+   "kh": 64.0,
+   "f": 15.0,
+   "creator": "ca. 560 kcal · 44 g E"
+  },
+  "ings": [
+   {
+    "raw": "300 g Orzo / Kritharaki",
+    "qty": 300.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Orzo / Kritharaki",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "150 g Feta / Hirtenkäse light",
+    "qty": 150.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Feta / Hirtenkäse light",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g Brokkoli (frisch oder TK)",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Brokkoli (frisch oder TK)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "100 g Cherrytomaten",
+    "qty": 100.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Cherrytomaten",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "100 g Edamame (oder Erbsen)",
+    "qty": 100.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Edamame (oder Erbsen)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 rote Paprika",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "",
+    "name": "rote Paprika",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 EL Olivenöl",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Olivenöl",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 g Hähnchenbrust",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hähnchenbrust",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Paprikapulver",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Paprikapulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "150 g Kochsahne 7 %",
+    "qty": 150.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Kochsahne 7 %",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "300 ml Gemüsebrühe",
+    "qty": 300.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Gemüsebrühe",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 EL Tomatenmark (oder passierte Tomaten)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Tomatenmark (oder passierte Tomaten)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "20 g Parmesan / Grana Padano",
+    "qty": 20.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Parmesan / Grana Padano",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Backofen auf 200 °C Ober-/Unterhitze vorheizen. Orzo roh in eine große Auflaufform geben, Feta in die Mitte legen.",
+   "Brokkoli, Cherrytomaten, Edamame und gewürfelte Paprika rundherum verteilen.",
+   "Hähnchen würfeln, mit Salz, Pfeffer und Paprika würzen und darauf verteilen, Olivenöl darüberträufeln.",
+   "Brühe mit Tomatenmark verrühren und zusammen mit der Kochsahne darübergießen. Parmesan darüberreiben.",
+   "Ca. 40 Minuten backen, bis das Hähnchen durch und der Orzo weich ist. Alles gut verrühren."
+  ],
+  "stepsNote": "aus Video abgeleitet",
+  "note": ""
+ },
+ {
+  "id": "r17",
+  "title": "Chicken-Frischkäse-Pasta One Pot (Ofen)",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Ofen-Pasta mit Frischkäse oder Feta",
+  "creator": "@kochenmitmarvin",
+  "source": "@kochenmitmarvin (Instagram, https://www.instagram.com/reel/DckvsNBoQMZ/)",
+  "link": "https://www.instagram.com/reel/DckvsNBoQMZ/",
+  "original": "4 Portionen",
+  "idea": "",
+  "nut": {
+   "kcal": 463,
+   "e": 36.0,
+   "kh": 64.0,
+   "f": 6.0,
+   "creator": "448 kcal · 34,5 g E · 61 g KH · 6,7 g F (ohne Streukäse)"
+  },
+  "ings": [
+   {
+    "raw": "300 g Nudeln (z. B. Girandole)",
+    "qty": 300.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Nudeln (z. B. Girandole)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "300 g Hähnchenbrustfilet",
+    "qty": 300.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hähnchenbrustfilet",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g Cherrytomaten",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Cherrytomaten",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "150 g TK-Brokkoli",
+    "qty": 150.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "TK-Brokkoli",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g Kräuter-Frischkäse 0,2 %",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Kräuter-Frischkäse 0,2 %",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 ml Kochsahne 7 %",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Kochsahne 7 %",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "450 ml Hühnerbrühe",
+    "qty": 450.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Hühnerbrühe",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 TL Paprika edelsüß",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Paprika edelsüß",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 TL Paprika geräuchert",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Paprika geräuchert",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 TL Knoblauchpulver",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Knoblauchpulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "3 TL Tomatengewürz",
+    "qty": 3.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Tomatengewürz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "80 g Light-Streukäse (optional)",
+    "qty": 80.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Light-Streukäse (optional)",
+    "est": false,
+    "opt": true
+   }
+  ],
+  "steps": [
+   "Backofen auf 200 °C Ober-/Unterhitze vorheizen. Nudeln roh in eine Auflaufform geben, Frischkäse in die Mitte setzen.",
+   "Cherrytomaten und Brokkoli rundherum verteilen.",
+   "Hähnchen würfeln, mit Paprika, Knoblauchpulver, Salz und Pfeffer würzen und darauf verteilen.",
+   "Brühe und Kochsahne mit Tomatengewürz und Knoblauchpulver verrühren und darübergießen.",
+   "Mit Alufolie abdecken und ca. 30 Minuten backen (Schätzung). Umrühren, optional Streukäse darüber und offen ca. 10 Minuten überbacken."
+  ],
+  "stepsNote": "aus Video abgeleitet",
+  "note": "Backzeit fehlte im Rezept und ist geschätzt."
+ },
+ {
+  "id": "r18",
+  "title": "Protein-Tortellini-Hack-Auflauf",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Hack-Nudel-Auflauf",
+  "creator": "@protein_tobi",
+  "source": "@protein_tobi (Instagram, https://www.instagram.com/reel/DceBIRdOIQw/)",
+  "link": "https://www.instagram.com/reel/DceBIRdOIQw/",
+  "original": "4 Portionen",
+  "idea": "",
+  "nut": {
+   "kcal": 604,
+   "e": 40.0,
+   "kh": 67.0,
+   "f": 18.0,
+   "creator": "500 kcal · 39 g E · 58 g KH · 13 g F"
+  },
+  "ings": [
+   {
+    "raw": "600 g Spinat-Ricotta-Tortellini",
+    "qty": 600.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Spinat-Ricotta-Tortellini",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "500 ml passierte Tomaten",
+    "qty": 500.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "passierte Tomaten",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "130 g Frischkäse light",
+    "qty": 130.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Frischkäse light",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ rote Zwiebel",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "",
+    "name": "rote Zwiebel",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "350 g Rinderhack light",
+    "qty": 350.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Rinderhack light",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "50 g geriebener Mozzarella light",
+    "qty": 50.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "geriebener Mozzarella light",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 EL Gemüsebrühe (Pulver)",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Gemüsebrühe (Pulver)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 EL Zuckerersatz",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Zuckerersatz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Backofen auf 200 °C Ober-/Unterhitze vorheizen. Tortellini in eine Auflaufform geben.",
+   "Hackfleisch mit der gewürfelten Zwiebel krümelig anbraten.",
+   "Passierte Tomaten, Frischkäse, Gemüsebrühe und Gewürze verrühren.",
+   "Sauce kurz aufkochen und über Tortellini und Hack geben.",
+   "Mit Mozzarella bestreuen und ca. 30–40 Minuten goldbraun überbacken."
+  ],
+  "stepsNote": "",
+  "note": "Rote Zwiebel halbiert (wenig Zwiebel)."
+ },
+ {
+  "id": "r19",
+  "title": "Beeren-Protein-Bowl",
+  "cats": [
+   "Frühstück"
+  ],
+  "group": "",
+  "creator": "@unbekannt",
+  "source": "@unbekannt (Bild)",
+  "link": "",
+  "original": "1 Portion, ×4",
+  "idea": "",
+  "nut": {
+   "kcal": 374,
+   "e": 35.0,
+   "kh": 37.0,
+   "f": 8.0,
+   "creator": "380 kcal · 34 g E · 38 g KH · 10 g F"
+  },
+  "ings": [
+   {
+    "raw": "1 kg Skyr (natur, light)",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "kg",
+    "name": "Skyr (natur, light)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "120 g Haferflocken",
+    "qty": 120.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Haferflocken",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 g Beeren (frisch oder TK)",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Beeren (frisch oder TK)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "40 g Mandeln, gehackt",
+    "qty": 40.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Mandeln, gehackt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 TL Chiasamen (optional)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Chiasamen (optional)",
+    "est": false,
+    "opt": true
+   },
+   {
+    "raw": "etwas Süße (z. B. Honig, Erythrit oder Stevia) (optional)",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "etwas Süße (z. B. Honig, Erythrit oder Stevia) (optional)",
+    "est": false,
+    "opt": true
+   }
+  ],
+  "steps": [
+   "Skyr in Schüsseln geben.",
+   "Haferflocken unterrühren.",
+   "Mit Beeren, gehackten Mandeln und Chiasamen toppen.",
+   "Nach Wunsch etwas süßen."
+  ],
+  "stepsNote": "",
+  "note": "Creator unbekannt: Schick mir gern den Link, dann trage ich ihn nach."
+ },
+ {
+  "id": "r20",
+  "title": "Hüttenkäse-Pancakes",
+  "cats": [
+   "Frühstück"
+  ],
+  "group": "",
+  "creator": "@glueck.in.schritten",
+  "source": "@glueck.in.schritten (Instagram)",
+  "link": "",
+  "original": "1 Portion (ca. 5 Pancakes), ×4",
+  "idea": "",
+  "nut": {
+   "kcal": 506,
+   "e": 32.0,
+   "kh": 46.0,
+   "f": 20.0,
+   "creator": "ca. 320 kcal · 28 g E · 30 g KH · 8 g F"
+  },
+  "ings": [
+   {
+    "raw": "400 g Hüttenkäse (körniger Frischkäse)",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hüttenkäse (körniger Frischkäse)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 reife Bananen (ca. 480 g)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "",
+    "name": "reife Bananen (ca. 480 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "8 Eier (ca. 440 g)",
+    "qty": 8.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier (ca. 440 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "120 g Haferflocken (fein oder zart)",
+    "qty": 120.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Haferflocken (fein oder zart)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 TL Backpulver",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Backpulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 TL Zimt",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Zimt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 TL Vanilleextrakt (oder Vanillezucker)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Vanilleextrakt (oder Vanillezucker)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "etwas Öl zum Braten",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "etwas Öl zum Braten",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Bananen in einer Schüssel mit einer Gabel zerdrücken.",
+   "Hüttenkäse, Eier, Haferflocken, Backpulver, Zimt und Vanille dazugeben und gut verrühren.",
+   "Etwas Öl in einer beschichteten Pfanne erhitzen.",
+   "Kleine Pancakes portionsweise bei mittlerer Hitze von beiden Seiten goldbraun ausbacken.",
+   "Nach Belieben mit frischen Früchten, etwas Joghurt oder Nüssen toppen."
+  ],
+  "stepsNote": "",
+  "note": "Die Creator-Angabe (ca. 320 kcal) ist zu niedrig: 2 Eier, 1 Banane, 30 g Haferflocken und 100 g Hüttenkäse ergeben schon rund 480 kcal, dazu kommt das Bratöl."
+ },
+ {
+  "id": "r21",
+  "title": "Frühstücks-Wrap mit Ei, Gemüse & Feta",
+  "cats": [
+   "Frühstück"
+  ],
+  "group": "Ei & Gemüse in der Tortilla",
+  "creator": "@glueck.in.schritten",
+  "source": "@glueck.in.schritten (Instagram)",
+  "link": "",
+  "original": "1 Portion, ×4",
+  "idea": "",
+  "nut": {
+   "kcal": 531,
+   "e": 32.0,
+   "kh": 41.0,
+   "f": 26.0,
+   "creator": "ca. 420 kcal · 28 g E · 32 g KH · 18 g F"
+  },
+  "ings": [
+   {
+    "raw": "4 Vollkorn-Tortillas (je ca. 60 g)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Vollkorn-Tortillas (je ca. 60 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "8 Eier (ca. 440 g)",
+    "qty": 8.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier (ca. 440 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g Feta light",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Feta light",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 Handvoll Spinat (ca. 120 g)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "Handvoll",
+    "name": "Spinat (ca. 120 g)",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "20 Cherrytomaten (ca. 300 g)",
+    "qty": 20.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Cherrytomaten (ca. 300 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 Gurken (ca. 600 g)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Gurken (ca. 600 g)",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "2 rote Paprika (ca. 300 g)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "rote Paprika (ca. 300 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 TL Olivenöl",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Olivenöl",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Kräuter nach Geschmack",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Kräuter nach Geschmack",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Eier mit etwas Salz und Pfeffer in einer Pfanne mit Olivenöl zu Rührei braten.",
+   "Tomaten, Gurke und Paprika klein schneiden.",
+   "Spinat kurz mit in die Pfanne geben, bis er zusammenfällt.",
+   "Tortillas kurz erwärmen.",
+   "Rührei, Gemüse und Feta auf den Tortillas verteilen, aufrollen und genießen."
+  ],
+  "stepsNote": "",
+  "note": "Die Creator-Angabe (ca. 420 kcal) ist etwas niedrig: Tortilla, 2 Eier, Feta und 1 TL Öl ergeben zusammen schon über 450 kcal."
+ },
+ {
+  "id": "r22",
+  "title": "Vollkornbrot mit Avocado und Ei",
+  "cats": [
+   "Frühstück"
+  ],
+  "group": "",
+  "creator": "@glueck.in.schritten",
+  "source": "@glueck.in.schritten (Instagram)",
+  "link": "",
+  "original": "1 Portion, ×4",
+  "idea": "",
+  "nut": {
+   "kcal": 442,
+   "e": 21.0,
+   "kh": 37.0,
+   "f": 22.0,
+   "creator": "ca. 380 kcal · 22 g E · 28 g KH · 20 g F"
+  },
+  "ings": [
+   {
+    "raw": "4 Scheiben Vollkornbrot (je ca. 70 g)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "Scheiben",
+    "name": "Vollkornbrot (je ca. 70 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 Avocados (ca. 280 g Fruchtfleisch)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Avocados (ca. 280 g Fruchtfleisch)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "8 Eier (ca. 440 g)",
+    "qty": 8.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier (ca. 440 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "20 Cherrytomaten (ca. 300 g)",
+    "qty": 20.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Cherrytomaten (ca. 300 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "8 Radieschen (ca. 80 g)",
+    "qty": 8.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Radieschen (ca. 80 g)",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "4 TL Zitronensaft",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Zitronensaft",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "etwas Feta  (optional)",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "etwas Feta  (optional)",
+    "est": true,
+    "opt": true
+   },
+   {
+    "raw": "frische Kräuter (Schnittlauch oder Kresse) (optional)",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "frische Kräuter (Schnittlauch oder Kresse) (optional)",
+    "est": false,
+    "opt": true
+   }
+  ],
+  "steps": [
+   "Eier in kochendem Wasser ca. 6–7 Minuten hart oder nach Belieben weich kochen.",
+   "In der Zwischenzeit Avocado mit einer Gabel zerdrücken und mit Zitronensaft, Salz und Pfeffer abschmecken.",
+   "Vollkornbrot nach Wunsch kurz toasten.",
+   "Avocadocreme auf das Brot streichen, Eier schälen und in Scheiben schneiden.",
+   "Mit Cherrytomaten, Radieschen, Feta und frischen Kräutern toppen."
+  ],
+  "stepsNote": "",
+  "note": "Chiliflocken weggelassen (nicht scharf). „½ Radieschen“ im Original ist vermutlich ein Tippfehler: mit 2 Radieschen pro Portion gerechnet."
+ },
+ {
+  "id": "r23",
+  "title": "Frühstücks-Quesadilla mit Ei, Gemüse & Käse",
+  "cats": [
+   "Frühstück"
+  ],
+  "group": "Ei & Gemüse in der Tortilla",
+  "creator": "@glueck.in.schritten",
+  "source": "@glueck.in.schritten (Instagram)",
+  "link": "",
+  "original": "1 Portion, ×4",
+  "idea": "",
+  "nut": {
+   "kcal": 492,
+   "e": 30.0,
+   "kh": 34.0,
+   "f": 25.0,
+   "creator": "ca. 420 kcal · 28 g E · 34 g KH · 18 g F"
+  },
+  "ings": [
+   {
+    "raw": "4 Vollkorn-Tortillas (je ca. 60 g)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Vollkorn-Tortillas (je ca. 60 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "8 Eier (ca. 440 g)",
+    "qty": 8.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Eier (ca. 440 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "120 g geriebener Käse (z. B. Gouda light)",
+    "qty": 120.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "geriebener Käse (z. B. Gouda light)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 Handvoll Spinat, frisch oder TK (ca. 120 g)",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "Handvoll",
+    "name": "Spinat, frisch oder TK (ca. 120 g)",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "2 rote Paprika (ca. 300 g)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "rote Paprika (ca. 300 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 kleine Frühlingszwiebeln",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "",
+    "name": "kleine Frühlingszwiebeln",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "4 TL Olivenöl",
+    "qty": 4.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Olivenöl",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Paprikapulver",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Paprikapulver",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Paprika in kleine Würfel schneiden, Frühlingszwiebeln in Ringe schneiden und mit dem Spinat kurz in einer Pfanne mit etwas Öl anbraten.",
+   "Eier verquirlen, mit Salz, Pfeffer und Paprikapulver würzen und zum Gemüse geben. Kurz stocken lassen.",
+   "Tortillas in einer Pfanne kurz von einer Seite erwärmen.",
+   "Je eine Tortillahälfte mit Ei-Gemüse-Mischung belegen und mit Käse bestreuen.",
+   "Zuklappen und von beiden Seiten goldbraun anbraten, bis der Käse geschmolzen ist.",
+   "In Stücke schneiden und genießen."
+  ],
+  "stepsNote": "",
+  "note": "Frühlingszwiebeln von 4 auf 2 reduziert (wenig Zwiebel)."
+ },
+ {
+  "id": "r24",
+  "title": "Cremige Feta-Tomaten-Pasta aus dem Ofen",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Ofen-Pasta mit Frischkäse oder Feta",
+  "creator": "@viktoria.freissler",
+  "source": "@viktoria.freissler (Instagram, https://www.instagram.com/reel/DfDC6k-MM9c/)",
+  "link": "https://www.instagram.com/reel/DfDC6k-MM9c/",
+  "original": "ca. 4 Portionen",
+  "idea": "",
+  "nut": {
+   "kcal": 499,
+   "e": 22.0,
+   "kh": 51.0,
+   "f": 22.0,
+   "creator": "ca. 490 kcal · 23 g E"
+  },
+  "ings": [
+   {
+    "raw": "250 g Protein-Pasta (roh)",
+    "qty": 250.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Protein-Pasta (roh)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "250 g Cherrytomaten",
+    "qty": 250.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Cherrytomaten",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ Zwiebel",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "",
+    "name": "Zwiebel",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 Knoblauchzehe",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Knoblauchzehe",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 EL Olivenöl",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Olivenöl",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "400 g gehackte Tomaten",
+    "qty": 400.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "gehackte Tomaten",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "700 ml Wasser",
+    "qty": 700.0,
+    "qty2": null,
+    "unit": "ml",
+    "name": "Wasser",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "1 Feta (200 g)",
+    "qty": 1.0,
+    "qty2": null,
+    "unit": "",
+    "name": "Feta (200 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ Glas Pesto Rosso (ca. 95 g)",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "Glas",
+    "name": "Pesto Rosso (ca. 95 g)",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "Petersilie",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Petersilie",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "3 TL Gemüsebrühe (Pulver)",
+    "qty": 3.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Gemüsebrühe (Pulver)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Backofen auf 220 °C Ober-/Unterhitze vorheizen.",
+   "Alle Zutaten außer der Petersilie in eine große Auflaufform geben: ungekochte Nudeln, Cherrytomaten, gewürfelte Zwiebel, Knoblauch, Olivenöl, gehackte Tomaten, Wasser, Pesto und Brühe. Den Feta in die Mitte legen.",
+   "Gut verteilen und darauf achten, dass die Nudeln mit Flüssigkeit bedeckt sind.",
+   "Im unteren Ofendrittel ca. 45 Minuten backen, bis die Nudeln gar sind.",
+   "Alles gut miteinander vermischen, mit Salz und Pfeffer abschmecken und mit Petersilie bestreuen."
+  ],
+  "stepsNote": "",
+  "note": "Zwiebel halbiert (wenig Zwiebel)."
+ },
+ {
+  "id": "r25",
+  "title": "Pizza Bowl (Meal Prep)",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "Protein-Pizza ohne Hefeteig",
+  "creator": "@marenmorereal",
+  "source": "@marenmorereal (Instagram, https://www.instagram.com/reel/DfFf3XNoISk/)",
+  "link": "https://www.instagram.com/reel/DfFf3XNoISk/",
+  "original": "2 Portionen, verdoppelt",
+  "idea": "",
+  "nut": {
+   "kcal": 576,
+   "e": 48.0,
+   "kh": 63.0,
+   "f": 13.0,
+   "creator": ""
+  },
+  "ings": [
+   {
+    "raw": "300 g Dinkelmehl",
+    "qty": 300.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Dinkelmehl",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "900 g Quark (oder pflanzliche Alternative)",
+    "qty": 900.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Quark (oder pflanzliche Alternative)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 TL Backpulver",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Backpulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Salz",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Salz",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Pfeffer",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Pfeffer",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "Kräuter",
+    "qty": null,
+    "qty2": null,
+    "unit": "",
+    "name": "Kräuter",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "200 g Tomatensoße",
+    "qty": 200.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Tomatensoße",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "80 g Veggie-Salami",
+    "qty": 80.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Veggie-Salami",
+    "est": true,
+    "opt": false
+   },
+   {
+    "raw": "120 g geriebener Käse (oder Alternative)",
+    "qty": 120.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "geriebener Käse (oder Alternative)",
+    "est": true,
+    "opt": false
+   }
+  ],
+  "steps": [
+   "Alle Zutaten für den Teig (Mehl, Quark, Backpulver, Salz, Pfeffer, Kräuter) miteinander verrühren.",
+   "Teig auf vier ofenfeste Schalen verteilen.",
+   "Bei 180 °C etwa 10 Minuten im Airfryer oder 15 Minuten im Ofen backen.",
+   "Tomatensoße, Veggie-Salami und Käse daraufgeben und nochmals 10–15 Minuten backen.",
+   "Direkt essen oder im Kühlschrank aufbewahren und bei Bedarf nochmal erwärmen."
+  ],
+  "stepsNote": "",
+  "note": "Mengen für den Belag fehlten im Original und sind geschätzt."
+ },
+ {
+  "id": "r26",
+  "title": "Char Siu Chicken (Freezer Meal Prep)",
+  "cats": [
+   "Mittag",
+   "Abend"
+  ],
+  "group": "",
+  "creator": "@shreddedandfed",
+  "source": "@shreddedandfed (Instagram, https://www.instagram.com/reel/DecFA83tXAb/)",
+  "link": "https://www.instagram.com/reel/DecFA83tXAb/",
+  "original": "8 Portionen, halbiert",
+  "idea": "",
+  "nut": {
+   "kcal": 361,
+   "e": 48.0,
+   "kh": 16.0,
+   "f": 12.0,
+   "creator": "345 kcal · 47 g E · 15 g KH · 11 g F"
+  },
+  "ings": [
+   {
+    "raw": "950 g Hähnchenschenkel ohne Haut und Knochen",
+    "qty": 950.0,
+    "qty2": null,
+    "unit": "g",
+    "name": "Hähnchenschenkel ohne Haut und Knochen",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2–3 Knoblauchzehen, gehackt",
+    "qty": 2.0,
+    "qty2": 3.0,
+    "unit": "",
+    "name": "Knoblauchzehen, gehackt",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 TL brauner Zucker (ca. 9 g)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "brauner Zucker (ca. 9 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 EL Honig (ca. 42 g)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Honig (ca. 42 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 EL Hoisin-Sauce (ca. 32 g)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "Hoisin-Sauce (ca. 32 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 TL Austernsauce (ca. 14 g)",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Austernsauce (ca. 14 g)",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "2 EL helle Sojasauce",
+    "qty": 2.0,
+    "qty2": null,
+    "unit": "EL",
+    "name": "helle Sojasauce",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ TL Fünf-Gewürze-Pulver",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Fünf-Gewürze-Pulver",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "½ TL Sesamöl",
+    "qty": 0.5,
+    "qty2": null,
+    "unit": "TL",
+    "name": "Sesamöl",
+    "est": false,
+    "opt": false
+   },
+   {
+    "raw": "⅛ TL rote Lebensmittelfarbe (optional)",
+    "qty": 0.125,
+    "qty2": null,
+    "unit": "TL",
+    "name": "rote Lebensmittelfarbe (optional)",
+    "est": false,
+    "opt": true
+   }
+  ],
+  "steps": [
+   "Alle Marinaden-Zutaten verrühren oder mixen, bis eine glatte Marinade entsteht.",
+   "Hähnchen auf Gefrierbeutel verteilen, Marinade gleichmäßig dazugeben, verschließen und gut durchmischen.",
+   "Flach einfrieren, so hält es 3–4 Monate.",
+   "Zum Kochen über Nacht im Kühlschrank vollständig auftauen.",
+   "In der Pfanne bei mittlerer Hitze 10–12 Minuten braten, bis die Kerntemperatur 74 °C erreicht. Dabei zweimal wenden und vor jedem Wenden mit Marinade aus dem Beutel bestreichen.",
+   "Alternativ im Ofen oder Airfryer garen, bis innen 74 °C erreicht sind."
+  ],
+  "stepsNote": "",
+  "note": "Amerikanische Maße (Cups, Löffel) in Gramm umgerechnet. 165 °F Kerntemperatur entspricht 74 °C."
+ }
+];
+
+/* ---------- Helfer ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('kb_'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('kb_'+k, JSON.stringify(v)); }catch(e){} }
+};
+let fav   = new Set(store.get('fav', []));
+let cart  = store.get('cart', []);        // [{id, p}]
+let done  = store.get('done', {});         // {itemKey: true}
+let pantry= store.get('pantry', []);       // ['hähnchen', ...]
+let ui    = Object.assign({q:'', cat:'Alle', sort:'std'}, store.get('ui', {}));
+const portionPref = store.get('portions', {});
+const byId = Object.fromEntries(RECIPES.map(r => [r.id, r]));
+const saveUi = () => store.set('ui', ui);
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove('show'),1800); }
+
+/* ---------- Mengen formatieren ---------- */
+const FR = [[0,''],[.125,'⅛'],[.25,'¼'],[1/3,'⅓'],[.5,'½'],[2/3,'⅔'],[.75,'¾'],[1,'']];
+function frac(x){
+  let w = Math.floor(x + 1e-9), f = x - w, best = FR[0], d = 9;
+  for(const o of FR){ const dd = Math.abs(f - o[0]); if(dd < d){ d = dd; best = o; } }
+  if(best[0] === 1){ w += 1; best = FR[0]; }
+  return (w > 0 ? w : '') + best[1] || '0';
+}
+const de = n => n.toLocaleString('de-DE', {maximumFractionDigits: 2});
+function amount(q, unit){            // q bereits skaliert, unit g|kg|ml|l
+  let v = unit === 'kg' ? q * 1000 : unit === 'l' ? q * 1000 : q;
+  const base = (unit === 'kg' || unit === 'g') ? 'g' : 'ml';
+  if(v >= 1000) return de(v / 1000) + (base === 'g' ? ' kg' : ' l');
+  return Math.round(v) + ' ' + base;
+}
+const UN = {Dosen:'Dose',Dose:'Dose',Prisen:'Prise',Prise:'Prise',Zehen:'Zehe',Zehe:'Zehe',Scheiben:'Scheibe',Stangen:'Stange'};
+const UP = {Dose:'Dosen',Prise:'Prisen',Zehe:'Zehen',Scheibe:'Scheiben',Stange:'Stangen'};
+const MASS = new Set(['g','kg','ml','l']);
+function unitDisp(u, q){ const s = UN[u] || u; return q > 1.01 && UP[s] ? UP[s] : s; }
+function scaleName(name, f){
+  return name
+    .replace(/(\bje )?ca\. ([\d.,]+) (g|kg|Stangen)/g, (m, je, n, u) => {
+      if(je) return m; const v = parseFloat(n.replace(',', '.')) * f;
+      return 'ca. ' + (u === 'Stangen' ? frac(v) + ' Stangen' : amount(v, u));
+    })
+    .replace(/oder ([\d.,]+) (g|ml)/g, (m, n, u) => 'oder ' + amount(parseFloat(n.replace(',', '.')) * f, u));
+}
+function ingText(i, f){
+  if(i.qty == null) return esc(i.raw);
+  const q = i.qty * f, q2 = i.qty2 != null ? i.qty2 * f : null;
+  let amt;
+  if(MASS.has(i.unit)){
+    amt = amount(q, i.unit);
+    if(q2 != null) amt = amt.replace(/ (g|kg|ml|l)$/, '') + '–' + amount(q2, i.unit);
+    return esc(amt + ' ' + scaleName(i.name, f));
+  }
+  const n = q2 != null ? frac(q) + '–' + frac(q2) : frac(q);
+  const u = i.unit ? ' ' + (['EL','TL','Bund','Handvoll','Glas','Cup','Packung','Stängel'].includes(i.unit) ? i.unit : unitDisp(i.unit, q2 ?? q)) : '';
+  return esc(n + u + ' ' + scaleName(i.name, f));
+}
+
+/* ---------- Zutaten normalisieren (Einkaufsliste / Vorrat) ---------- */
+const STAPLE = /^(etwas |schuss )?((salz|pfeffer|wasser|(oliven)?öl)\b|ölspray)/i;
+const SYN = {eier:'ei', frühlingszwiebeln:'frühlingszwiebel', kartoffeln:'kartoffel', möhren:'möhre', gurken:'gurke', avocados:'avocado',
+  bananen:'banane', knoblauchzehe:'knoblauch', knoblauchzehen:'knoblauch', 'weiße zwiebel':'zwiebel', 'große zwiebel':'zwiebel', 'kleine zwiebel':'zwiebel',
+  'rote zwiebel':'zwiebel', 'frischer basilikum':'basilikum', 'frühlingszwiebeln zum garnieren':'frühlingszwiebel'};
+const DISP = {ei:['Ei','Eier'], frühlingszwiebel:['Frühlingszwiebel','Frühlingszwiebeln'], kartoffel:['Kartoffel','Kartoffeln'], möhre:['Möhre','Möhren'],
+  gurke:['Gurke','Gurken'], avocado:['Avocado','Avocados'], banane:['Banane','Bananen'], knoblauch:['Knoblauch','Knoblauch'], zwiebel:['Zwiebel','Zwiebeln']};
+function baseName(name){
+  let s = name.replace(/\([^)]*\)/g, '').replace(/\s+oder\s+[\d.,]+\s*(g|ml)\b.*$/i, '').split(',')[0].trim();
+  s = s.replace(/\s+/g, ' ');
+  return s;
+}
+function keyOf(name){
+  let k = baseName(name).toLowerCase();
+  if(/^knoblauchzehe/.test(k)) k = 'knoblauch';
+  return SYN[k] || k;
+}
+const isStaple = i => STAPLE.test(baseName(i.name));
+
+const SECTIONS = [
+  ['Tiefkühl',            /\bTK\b|kaisergemüse|edamame/i],
+  ['Fleisch & Wurst',     /hähnchen|hack|steak|pancetta|salami|schinken|rind/i],
+  ['Milch, Käse & Eier',  /\bei\b|eier|käse|sahne|milch|joghurt|quark|skyr|feta|mozzarella|parmesan|butter|grana/i],
+  ['Konserven & Saucen',  /dose|tomatenmark|passierte|gehackte tomaten|stückige|pizzatomaten|soße|sauce|ketchup|mayonnaise|honig|essig|gochujang|pesto|brühe|thunfisch|\bmais\b|kidney|sesam|austern/i],
+  ['Backen & Würzen',     /pulver|oregano|kreuzkümmel|cumin|backpulver|zimt|vanille|lorbeer|gewürz|zucker|stevia|erythrit|chia|mandel|lebensmittelfarbe|süße|paprika edelsüß|paprika geräuchert/i],
+  ['Nudeln, Reis & Brot', /nudel|makkaroni|orzo|kritharaki|tortellini|lasagne|reis\b|spätzle|haferflocken|mehl|stärke|panko|cornflakes|pasta|tortilla|brot\b|vollkornbrot|girandole/i],
+  ['Obst & Gemüse',       /tomate|zucchini|paprika|möhre|sellerie|kartoffel|brokkoli|spinat|gurke|avocado|banane|beere|radieschen|zitrone|zwiebel|knoblauch|ingwer|petersilie|koriander|basilikum|salat|kräuter|schnittlauch|kresse/i]
+];
+const SEC_ORDER = SECTIONS.map(s => s[0]).concat(['Sonstiges']);
+const sectionOf = name => { for(const [n, re] of SECTIONS) if(re.test(name)) return n; return 'Sonstiges'; };
+
+/* Einkaufsliste aus Warenkorb */
+function buildShopping(){
+  const map = new Map();
+  for(const c of cart){
+    const r = byId[c.id]; if(!r) continue; const f = c.p / 4;
+    for(const i of r.ings){
+      if(i.opt || isStaple(i)) continue;
+      const k = keyOf(i.name); if(!k) continue;
+      const sec = sectionOf(k + ' ' + i.name);
+      if(i.qty == null){
+        const id = sec + '|' + k + '|-';
+        if(!map.has(id)) map.set(id, {id, sec, key:k, name:baseName(i.name), unit:'', q:null, from:new Set()});
+        map.get(id).from.add(r.title); continue;
+      }
+      let u = UN[i.unit] || i.unit, q = (i.qty2 ?? i.qty) * f;
+      if(u === 'kg'){ u = 'g'; q *= 1000; } else if(u === 'l'){ u = 'ml'; q *= 1000; }
+      if(/^knoblauchzehe/i.test(i.name)) u = 'Zehe';
+      const id = sec + '|' + k + '|' + u;
+      if(!map.has(id)) map.set(id, {id, sec, key:k, name:baseName(i.name), unit:u, q:0, from:new Set()});
+      const e = map.get(id); e.q += q; e.from.add(r.title);
+    }
+  }
+  const groups = {};
+  for(const e of map.values()) (groups[e.sec] ||= []).push(e);
+  for(const g of Object.values(groups)) g.sort((a, b) => a.key.localeCompare(b.key, 'de'));
+  return groups;
+}
+function shopLine(e){
+  let name = e.name;
+  const d = DISP[e.key];
+  if(d) name = (e.q != null && Math.ceil(e.q - 1e-9) > 1) ? d[1] : d[0];
+  if(e.q == null) return {name, qty:''};
+  let qty;
+  if(e.unit === 'g' || e.unit === 'ml') qty = amount(e.q, e.unit);
+  else if(['EL', 'TL', 'Cup'].includes(e.unit)) qty = frac(Math.ceil(e.q * 4 - 1e-9) / 4) + ' ' + e.unit;
+  else { const n = Math.max(1, Math.ceil(e.q - 1e-9)); qty = !e.unit ? n + '×' : n + ' ' + (['Bund', 'Handvoll', 'Glas', 'Packung', 'Stängel'].includes(e.unit) ? e.unit : unitDisp(e.unit, n)); }
+  return {name: name.charAt(0).toUpperCase() + name.slice(1), qty};
+}
+function shoppingText(){
+  const g = buildShopping(); let out = 'Einkaufsliste\n';
+  for(const s of SEC_ORDER){ if(!g[s]) continue; out += '\n' + s + '\n';
+    for(const e of g[s]){ if(done[e.id]) continue; const l = shopLine(e); out += '• ' + (l.qty ? l.qty + ' ' : '') + l.name + '\n'; } }
+  return out.trim();
+}
+
+/* ---------- Vorrat / Resteverwertung ---------- */
+const matchTerm = (key, t) => t.length >= 2 && (key === t || (t.length >= 3 && (key.includes(t) || (key.length >= 4 && t.includes(key)))));
+function pantryScore(r){
+  const need = [], have = [], miss = [];
+  for(const i of r.ings){
+    if(i.opt || isStaple(i)) continue;
+    const k = keyOf(i.name), sec = sectionOf(k + ' ' + i.name);
+    if(sec === 'Backen & Würzen' && !(MASS.has(i.unit) && i.qty >= 20)) continue;  // Gewürze zählen nicht
+    if(i.qty == null && /zum garnieren|basilikum|petersilie|kräuter|lorbeer|salat/i.test(i.name)) continue;
+    need.push(i);
+    (pantry.some(t => matchTerm(k, t) || matchTerm(i.name.toLowerCase(), t)) ? have : miss).push(i);
+  }
+  return {need, have, miss, pct: need.length ? have.length / need.length : 0};
+}
+function allIngredientNames(){
+  const m = new Map();
+  for(const r of RECIPES) for(const i of r.ings){ if(i.opt || isStaple(i)) continue; const k = keyOf(i.name); m.set(k, (m.get(k) || 0) + 1); }
+  return [...m.entries()].sort((a, b) => b[1] - a[1]).map(e => e[0]);
+}
+
+/* ---------- Views ---------- */
+const CATS = ['Alle', 'Frühstück', 'Mittag', 'Abend', '♥ Favoriten'];
+function matches(r){
+  if(ui.cat === '♥ Favoriten' && !fav.has(r.id)) return false;
+  if(ui.cat !== 'Alle' && ui.cat !== '♥ Favoriten' && !r.cats.includes(ui.cat)) return false;
+  const q = ui.q.trim().toLowerCase(); if(!q) return true;
+  return q.split(/\s+/).every(w => (r.title + ' ' + r.creator + ' ' + r.group + ' ' + r.ings.map(i => i.name).join(' ')).toLowerCase().includes(w));
+}
+function filtered(){
+  let rs = RECIPES.filter(matches);
+  if(ui.sort === 'kcal') rs.sort((a, b) => a.nut.kcal - b.nut.kcal);
+  if(ui.sort === 'prot') rs.sort((a, b) => b.nut.e - a.nut.e);
+  return rs;
+}
+function cardsHtml(rs){
+  return rs.map(r => `
+    <button class="card" data-go="/r/${r.id}">
+      <h3>${esc(r.title)}</h3>
+      <div class="meta">${esc(r.cats.join(' · '))} · ${esc(r.creator)}</div>
+      <div class="pills"><span class="pill">${r.nut.kcal} kcal</span><span class="pill g">${r.nut.e} g Eiweiß</span>
+        <span class="pill n">${r.nut.kh} g KH</span><span class="pill n">${r.nut.f} g F</span></div>
+      <span class="heart ${fav.has(r.id) ? 'on' : ''}" data-fav="${r.id}" aria-label="Favorit">${fav.has(r.id) ? '♥' : '♡'}</span>
+    </button>`).join('') || '<div class="empty">Nichts gefunden.</div>';
+}
+function viewList(){
+  const rs = filtered(), cards = cardsHtml(rs);
+  return `<header class="top"><div class="title">Kochbuch<small>${RECIPES.length} Rezepte</small></div>
+    <input type="search" id="q" placeholder="Rezept oder Zutat suchen …" value="${esc(ui.q)}" autocomplete="off" enterkeyhint="search">
+    <div class="chips">${CATS.map(c => `<button class="chip ${ui.cat === c ? 'on' : ''}" data-cat="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+    <div class="row" style="margin-top:6px"><span class="small" id="cnt">${rs.length} Treffer</span><span class="sp"></span>
+      <select class="sel" id="sort"><option value="std" ${ui.sort==='std'?'selected':''}>Standard</option><option value="kcal" ${ui.sort==='kcal'?'selected':''}>Wenigste kcal</option><option value="prot" ${ui.sort==='prot'?'selected':''}>Meiste Eiweiß</option></select></div>
+    </header>
+    <div class="list" id="cards">${cards}</div>`;
+}
+
+function viewDetail(id){
+  const r = byId[id]; if(!r) return '<div class="empty">Rezept nicht gefunden.</div>';
+  const p = portionPref[id] || 4, f = p / 4;
+  const inCart = cart.find(c => c.id === id);
+  const same = r.group ? RECIPES.filter(x => x.group === r.group && x.id !== id) : [];
+  const ings = r.ings.map((i, n) => `<li><label class="ck"><input type="checkbox" data-ing="${id}:${n}" ${done['i:'+id+':'+n] ? 'checked' : ''}>
+      <span class="t">${ingText(i, f)}${i.est ? '<span class="est" title="Menge geschätzt">≈ Schätzung</span>' : ''}${i.opt && !/optional/.test(i.raw) ? ' (optional)' : ''}</span></label></li>`).join('');
+  return `<div class="top" style="padding-top:8px"><button class="back" data-go="/">‹ Rezepte</button></div>
+    <div class="row"><h1 class="dh sp">${esc(r.title)}</h1>
+      <button class="heart on" style="position:static;color:${fav.has(id) ? '#e0245e' : 'var(--mute)'}" data-fav="${id}">${fav.has(id) ? '♥' : '♡'}</button></div>
+    <div class="meta">${esc(r.cats.join(' · '))}${r.group ? ' · ' + esc(r.group) : ''}</div>
+    <div class="nut"><div><b>${r.nut.kcal}</b><span>kcal</span></div><div><b>${r.nut.e} g</b><span>Eiweiß</span></div><div><b>${r.nut.kh} g</b><span>Kohlenh.</span></div><div><b>${r.nut.f} g</b><span>Fett</span></div></div>
+    <div class="small" style="margin-top:-6px">Nährwerte pro Portion${r.nut.creator ? ` · Creator-Angabe: ${esc(r.nut.creator)}` : ''}</div>
+    <div class="box"><div class="row"><h2 class="sp">Zutaten</h2>
+      <div class="stepper"><button data-p="-1" data-id="${id}" aria-label="weniger">−</button><b>${p} ${p === 1 ? 'Portion' : 'Portionen'}</b><button data-p="1" data-id="${id}" aria-label="mehr">+</button></div></div>
+      ${r.original ? `<div class="small" style="margin:2px 0 4px">Original: ${esc(r.original)}</div>` : ''}
+      <ul class="ing">${ings}</ul></div>
+    <button class="btn" data-cart="${id}">${inCart ? '✓ Auf der Einkaufsliste (' + inCart.p + ' P.) – aktualisieren' : '🛒 ' + p + ' Portionen auf die Einkaufsliste'}</button>
+    <div class="box"><h2>Zubereitung</h2>${r.stepsNote ? `<div class="small" style="margin-bottom:4px">${esc(r.stepsNote.charAt(0).toUpperCase() + r.stepsNote.slice(1))}</div>` : ''}
+      <ol class="steps">${r.steps.map(s => `<li><span>${esc(s)}</span></li>`).join('')}</ol></div>
+    ${r.note ? `<div class="box"><h2>Anpassungen</h2><div class="note" style="margin:0">${esc(r.note)}</div></div>` : ''}
+    <div class="box"><h2>Quelle</h2><div>${esc(r.source.replace(/https?:\/\/\S+/, '').replace(/\(\s*(Instagram),?\s*\)/, '($1)').trim())}</div>
+      ${r.link ? `<div style="margin-top:6px"><a href="${esc(r.link)}" target="_blank" rel="noopener">Original-Reel öffnen ↗</a></div>` : ''}
+      ${r.idea ? `<div class="small" style="margin-top:6px">Original-Idee: ${esc(r.idea)}</div>` : ''}</div>
+    ${same.length ? `<div class="sec-h">Ähnliche Rezepte (${esc(r.group)})</div><div class="list" style="margin-top:0">${same.map(x => `<button class="card" data-go="/r/${x.id}"><h3>${esc(x.title)}</h3><div class="meta">${x.nut.kcal} kcal · ${x.nut.e} g Eiweiß · ${esc(x.creator)}</div></button>`).join('')}</div>` : ''}`;
+}
+
+function viewShop(){
+  const g = buildShopping(); const n = Object.values(g).reduce((a, b) => a + b.length, 0);
+  const plan = cart.map(c => { const r = byId[c.id]; return `<div class="row" style="padding:8px 0;border-top:1px solid var(--line)">
+      <button class="sp" style="text-align:left;font-weight:600" data-go="/r/${c.id}">${esc(r.title)}</button>
+      <div class="stepper"><button data-cp="-1" data-id="${c.id}">−</button><b style="min-width:34px">${c.p}</b><button data-cp="1" data-id="${c.id}">+</button></div>
+      <button data-cdel="${c.id}" style="color:var(--mute);font-size:20px;padding:4px 6px">✕</button></div>`; }).join('');
+  let list = '';
+  for(const s of SEC_ORDER){ if(!g[s]) continue;
+    list += `<div class="sec-h">${esc(s)}</div><div class="box" style="margin-top:0;padding-top:4px;padding-bottom:4px"><ul class="ing">` +
+      g[s].map(e => { const l = shopLine(e); const d = !!done[e.id];
+        return `<li><label class="ck ${d ? 'done' : ''}"><input type="checkbox" data-shop="${esc(e.id)}" ${d ? 'checked' : ''}><span class="t">${esc(l.name)}</span><span class="qty">${esc(l.qty)}</span></label></li>`; }).join('') + `</ul></div>`; }
+  return `<header class="top"><div class="title">Einkauf<small>${n} Artikel</small></div></header>
+    ${cart.length ? `<div class="box" style="margin-top:6px"><h2>Geplante Gerichte</h2>${plan}
+      <div class="small" style="margin-top:8px">Öl, Salz und Pfeffer sind nicht aufgeführt.</div></div>
+      <div class="row" style="margin-top:14px;gap:8px"><button class="btn sm sp" style="padding:12px" data-share>Liste teilen</button>
+        <button class="btn sm sec" style="padding:12px" data-clear-done>Haken zurücksetzen</button><button class="btn sm sec" style="padding:12px" data-clear>Leeren</button></div>
+      ${list}`
+    : `<div class="empty">Noch nichts geplant.<br>Öffne ein Rezept und tippe auf<br>„Auf die Einkaufsliste“.</div>`}`;
+}
+
+function viewPantry(){
+  const names = allIngredientNames();
+  const ranked = RECIPES.map(r => ({r, s: pantryScore(r)})).sort((a, b) => b.s.pct - a.s.pct || a.s.miss.length - b.s.miss.length);
+  const sugg = names.filter(n => !pantry.includes(n)).slice(0, 24);
+  return `<header class="top"><div class="title">Vorrat<small>Was kann ich kochen?</small></div></header>
+    <div class="box" style="margin-top:6px"><h2>Das habe ich da</h2>
+      <input type="text" id="pin" list="plist" placeholder="Zutat eintippen, z. B. Hähnchen, Eier, Reis …" autocomplete="off" enterkeyhint="done">
+      <datalist id="plist">${names.map(n => `<option value="${esc(n)}">`).join('')}</datalist>
+      <div class="tagrow">${pantry.map((t, n) => `<span class="tag">${esc(t)}<button data-pdel="${n}" aria-label="entfernen">✕</button></span>`).join('') || '<span class="small">Noch nichts eingetragen.</span>'}</div>
+      ${sugg.length ? `<div class="small" style="margin-top:12px">Häufige Zutaten antippen:</div><div class="tagrow" style="margin-top:6px">${sugg.map(n => `<button class="chip" data-padd="${esc(n)}">${esc(n)}</button>`).join('')}</div>` : ''}
+      <div class="small" style="margin-top:10px">Öl, Salz, Pfeffer und Gewürze werden ignoriert.</div></div>
+    ${pantry.length ? `<div class="list">${ranked.map(({r, s}) => `<button class="card" data-go="/r/${r.id}">
+        <h3>${esc(r.title)}</h3><div class="meta">${s.have.length} von ${s.need.length} Zutaten vorhanden · ${Math.round(s.pct * 100)} %</div>
+        <div class="bar"><i style="width:${s.pct * 100}%"></i></div>
+        ${s.miss.length ? `<div class="small" style="margin-top:8px">Fehlt: ${esc(s.miss.map(i => baseName(i.name)).join(', '))}</div>` : '<div class="small" style="margin-top:8px;color:var(--ok);font-weight:700">Alles da ✓</div>'}</button>`).join('')}</div>` : ''}`;
+}
+
+/* ---------- Router / Render ---------- */
+const route = () => (location.hash.replace(/^#/, '') || '/');
+function go(path){ if(route() === path) render(); else location.hash = path; }
+function render(){
+  const rt = route(), app = $('#app');
+  const m = rt.match(/^\/r\/(\w+)/);
+  let html, tab;
+  if(m){ html = viewDetail(m[1]); tab = '/'; }
+  else if(rt === '/einkauf'){ html = viewShop(); tab = rt; }
+  else if(rt === '/vorrat'){ html = viewPantry(); tab = rt; }
+  else { html = viewList(); tab = '/'; }
+  const keepQ = document.activeElement && document.activeElement.id === 'q';
+  app.innerHTML = '<div class="wrap">' + html + '</div>';
+  if(keepQ){ const q = $('#q'); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
+  const nCart = cart.length;
+  $('#tabs').innerHTML = [['/', '📖', 'Rezepte'], ['/einkauf', '🛒', 'Einkauf'], ['/vorrat', '🥕', 'Vorrat']]
+    .map(([p, ic, l]) => `<button class="${tab === p ? 'on' : ''}" data-go="${p}"><span class="ic">${ic}</span>${l}${p === '/einkauf' && nCart ? `<span class="badge">${nCart}</span>` : ''}</button>`).join('');
+}
+window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
+window.addEventListener('scroll', () => { const h = document.querySelector('header.top'); if(h) h.classList.toggle('scrolled', scrollY > 4); }, {passive:true});
+
+/* ---------- Events ---------- */
+const saveCart = () => store.set('cart', cart);
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-go],[data-fav],[data-cat],[data-p],[data-cart],[data-cp],[data-cdel],[data-share],[data-clear],[data-clear-done],[data-padd],[data-pdel]');
+  if(!t) return;
+  const d = t.dataset;
+  if(d.fav){ e.stopPropagation(); e.preventDefault(); fav.has(d.fav) ? fav.delete(d.fav) : fav.add(d.fav); store.set('fav', [...fav]); const y = scrollY; render(); scrollTo(0, y); return; }
+  if(d.go){ go(d.go); return; }
+  if(d.cat){ ui.cat = d.cat; saveUi(); render(); return; }
+  if(d.p){ const id = d.id; portionPref[id] = Math.min(24, Math.max(1, (portionPref[id] || 4) + +d.p)); store.set('portions', portionPref); const y = scrollY; render(); scrollTo(0, y); return; }
+  if(d.cart){ const p = portionPref[d.cart] || 4, c = cart.find(x => x.id === d.cart); c ? c.p = p : cart.push({id:d.cart, p}); saveCart(); toast(p + ' Portionen auf der Einkaufsliste'); const y = scrollY; render(); scrollTo(0, y); return; }
+  if(d.cp){ const c = cart.find(x => x.id === d.id); c.p = Math.min(24, Math.max(1, c.p + +d.cp)); saveCart(); render(); return; }
+  if(d.cdel){ cart = cart.filter(x => x.id !== d.cdel); saveCart(); render(); return; }
+  if(d.clear !== undefined){ if(confirm('Einkaufsliste komplett leeren?')){ cart = []; done = {}; saveCart(); store.set('done', done); render(); } return; }
+  if(d.clearDone !== undefined){ for(const k of Object.keys(done)) if(!k.startsWith('i:')) delete done[k]; store.set('done', done); toast('Haken zurückgesetzt'); render(); return; }
+  if(d.share !== undefined){ const txt = shoppingText();
+    if(navigator.share){ try{ await navigator.share({title:'Einkaufsliste', text:txt}); }catch(_){} }
+    else { try{ await navigator.clipboard.writeText(txt); toast('Liste kopiert'); }catch(_){ prompt('Liste kopieren:', txt); } } return; }
+  if(d.padd){ if(!pantry.includes(d.padd)) pantry.push(d.padd); store.set('pantry', pantry); render(); return; }
+  if(d.pdel){ pantry.splice(+d.pdel, 1); store.set('pantry', pantry); render(); return; }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if(t.dataset.shop){ t.checked ? done[t.dataset.shop] = true : delete done[t.dataset.shop]; store.set('done', done); const y = scrollY; render(); scrollTo(0, y); }
+  else if(t.dataset.ing){ const [id, n] = t.dataset.ing.split(':'); const k = 'i:' + id + ':' + n; t.checked ? done[k] = true : delete done[k]; store.set('done', done); t.closest('label').classList.toggle('done', t.checked); }
+  else if(t.id === 'sort'){ ui.sort = t.value; saveUi(); render(); }
+});
+document.addEventListener('input', e => {
+  if(e.target.id === 'q'){ ui.q = e.target.value; saveUi(); const rs = filtered(); $('#cards').innerHTML = cardsHtml(rs); $('#cnt').textContent = rs.length + ' Treffer'; }
+});
+document.addEventListener('keydown', e => {
+  if(e.target.id === 'pin' && e.key === 'Enter'){ const v = e.target.value.trim().toLowerCase(); if(v && !pantry.includes(v)){ pantry.push(v); store.set('pantry', pantry); } render(); const i = $('#pin'); if(i) i.focus(); }
+});
+document.addEventListener('change', e => { if(e.target.id === 'pin'){ const v = e.target.value.trim().toLowerCase(); if(v && !pantry.includes(v)){ pantry.push(v); store.set('pantry', pantry); render(); } } });
+
+render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){ navigator.serviceWorker.register('sw.js').catch(() => {}); }
+</script>
+</body>
+</html>
