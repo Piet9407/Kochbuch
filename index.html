@@ -117,7 +117,7 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const store = {
   get(k, d){ try{ const v = localStorage.getItem('kb_'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
-  set(k, v){ try{ localStorage.setItem('kb_'+k, JSON.stringify(v)); }catch(e){} }
+  set(k, v){ try{ localStorage.setItem('kb_'+k, JSON.stringify(v)); }catch(e){} if(typeof onLocalSet === 'function') onLocalSet(k); }
 };
 let fav   = new Set(store.get('fav', []));
 let cart  = store.get('cart', []);        // [{id, p}]
@@ -387,12 +387,13 @@ function render(){
   if(m){ html = viewDetail(m[1]); tab = '/'; }
   else if(rt === '/einkauf'){ html = viewShop(); tab = rt; }
   else if(rt === '/vorrat'){ html = viewPantry(); tab = rt; }
+  else if(rt === '/sync'){ html = viewSync(); tab = rt; }
   else { html = viewList(); tab = '/'; }
   const keepQ = document.activeElement && document.activeElement.id === 'q';
   app.innerHTML = '<div class="wrap">' + html + '</div>';
   if(keepQ){ const q = $('#q'); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
   const nCart = cart.length;
-  $('#tabs').innerHTML = [['/', '📖', 'Rezepte'], ['/einkauf', '🛒', 'Einkauf'], ['/vorrat', '🥕', 'Vorrat']]
+  $('#tabs').innerHTML = [['/', '📖', 'Rezepte'], ['/einkauf', '🛒', 'Einkauf'], ['/vorrat', '🥕', 'Vorrat'], ['/sync', '🔄', 'Sync']]
     .map(([p, ic, l]) => `<button class="${tab === p ? 'on' : ''}" data-go="${p}"><span class="ic">${ic}</span>${l}${p === '/einkauf' && nCart ? `<span class="badge">${nCart}</span>` : ''}</button>`).join('');
 }
 window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
@@ -407,7 +408,7 @@ function addExtra(){
   saveExtra(); render(); const n = $('#xin'); if(n) n.focus();
 }
 document.addEventListener('click', async e => {
-  const t = e.target.closest('[data-go],[data-fav],[data-cat],[data-p],[data-cart],[data-cp],[data-cdel],[data-share],[data-clear],[data-clear-done],[data-padd],[data-pdel],[data-xadd],[data-xdel]');
+  const t = e.target.closest('[data-go],[data-fav],[data-cat],[data-p],[data-cart],[data-cp],[data-cdel],[data-share],[data-clear],[data-clear-done],[data-padd],[data-pdel],[data-xadd],[data-xdel],[data-sync-on],[data-sync-off],[data-sync-gen]');
   if(!t) return;
   const d = t.dataset;
   if(d.fav){ e.stopPropagation(); e.preventDefault(); fav.has(d.fav) ? fav.delete(d.fav) : fav.add(d.fav); store.set('fav', [...fav]); const y = scrollY; render(); scrollTo(0, y); return; }
@@ -417,6 +418,9 @@ document.addEventListener('click', async e => {
   if(d.cart){ const p = portionPref[d.cart] || 4, c = cart.find(x => x.id === d.cart); c ? c.p = p : cart.push({id:d.cart, p}); saveCart(); toast(p + ' Portionen auf der Einkaufsliste'); const y = scrollY; render(); scrollTo(0, y); return; }
   if(d.cp){ const c = cart.find(x => x.id === d.id); c.p = Math.min(24, Math.max(1, c.p + +d.cp)); saveCart(); render(); return; }
   if(d.cdel){ cart = cart.filter(x => x.id !== d.cdel); saveCart(); render(); return; }
+  if(d.syncOn !== undefined){ syncConnect(); return; }
+  if(d.syncOff !== undefined){ syncDisconnect(); return; }
+  if(d.syncGen !== undefined){ const W = ['brot','milch','apfel','nudel','reis','kaese','suppe','pizza','salat','honig','pfanne','tomate']; const r = a => a[Math.floor(Math.random() * a.length)]; $('#hhcode').value = r(W) + '-' + r(W) + '-' + String(Math.floor(1000 + Math.random() * 9000)); return; }
   if(d.xadd !== undefined){ addExtra(); return; }
   if(d.xdel){ extra = extra.filter(x => x.id !== d.xdel); saveExtra(); const y = scrollY; render(); scrollTo(0, y); return; }
   if(d.clear !== undefined){ if(confirm('Einkaufsliste komplett leeren? Gerichte und eigene Artikel werden entfernt.')){ cart = []; extra = []; done = {}; saveCart(); saveExtra(); store.set('done', done); render(); } return; }
@@ -443,7 +447,128 @@ document.addEventListener('keydown', e => {
 });
 document.addEventListener('change', e => { if(e.target.id === 'pin'){ const v = e.target.value.trim().toLowerCase(); if(v && !pantry.includes(v)){ pantry.push(v); store.set('pantry', pantry); render(); } } });
 
+/* ---------- Synchronisation (Firebase Firestore, gemeinsamer Haushalts-Code) ---------- */
+const FB_CFG = {apiKey:"AIzaSyBg4hHruWAgkZgCbC2EZ0p4UainoIxd3yQ", authDomain:"kochbuch-a481d.firebaseapp.com", projectId:"kochbuch-a481d",
+  storageBucket:"kochbuch-a481d.firebasestorage.app", messagingSenderId:"524686964760", appId:"1:524686964760:web:b19387cbc314b70ceb6b6d"};
+const FB_BASE = 'https://www.gstatic.com/firebasejs/10.14.1/';
+const SYNC_KEYS = ['fav', 'cart', 'extra', 'done', 'pantry'];
+const sync = {code: store.get('hh', ''), status: 'off', msg: '', fs: null, ref: null, unsub: null, timer: null, dirty: new Set(), applying: false, late: false};
+let tl = store.get('tl', {});                                   // Zeitstempel der letzten lokalen Änderung je Bereich
+const emptyOf = k => k === 'done' ? {} : [];
+const rawGet = k => { try{ return localStorage.getItem('kb_' + k); }catch(e){ return null; } };
+const rawSet = (k, s) => { try{ localStorage.setItem('kb_' + k, s); }catch(e){} };
+function reloadVar(k){
+  const v = store.get(k, emptyOf(k));
+  if(k === 'fav') fav = new Set(v); else if(k === 'cart') cart = v; else if(k === 'extra') extra = v; else if(k === 'done') done = v; else if(k === 'pantry') pantry = v;
+}
+const outDone = o => Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith('i:')));   // Zutaten-Haken beim Kochen bleiben lokal
+function onLocalSet(k){
+  if(sync.applying || !SYNC_KEYS.includes(k)) return;
+  tl[k] = Date.now(); rawSet('tl', JSON.stringify(tl)); sync.dirty.add(k); schedulePush();
+}
+function schedulePush(){ if(!sync.ref) return; clearTimeout(sync.timer); sync.timer = setTimeout(flushPush, 500); }
+function flushPush(){
+  if(!sync.ref || !sync.dirty.size) return;
+  const o = {}, ks = [...sync.dirty]; sync.dirty.clear();
+  for(const k of ks){
+    let s = rawGet(k) || JSON.stringify(emptyOf(k));
+    if(k === 'done'){ try{ s = JSON.stringify(outDone(JSON.parse(s))); }catch(_){} }
+    o[k] = s; o['t_' + k] = tl[k] || Date.now();
+  }
+  Promise.resolve(sync.fs.setDoc(sync.ref, o, {merge: true})).catch(err => { ks.forEach(k => sync.dirty.add(k)); setStatus('error', friendly(err)); });
+}
+function mergeVal(k, loc, rem){
+  if(rem == null) return loc;
+  if(k === 'done') return Object.assign({}, loc, outDone(rem));
+  if(k === 'fav' || k === 'pantry') return [...new Set([...rem, ...loc])];
+  if(k === 'cart'){ const ids = new Set(rem.map(c => c.id)); return rem.concat(loc.filter(c => !ids.has(c.id))); }
+  if(k === 'extra'){ const ts = new Set(rem.map(x => x.t.toLowerCase())); return rem.concat(loc.filter(x => !ts.has(x.t.toLowerCase()))); }
+  return loc;
+}
+function onSnap(snap){
+  const joined = rawGet('hhjoined') === JSON.stringify(sync.code);
+  if(snap.metadata && snap.metadata.fromCache && !joined) return;      // erst auf die Antwort des Servers warten
+  const data = snap.exists() ? snap.data() : {};
+  let changed = false; sync.applying = true;
+  try{
+    if(!joined){                                                       // erste Verbindung: beide Seiten zusammenführen
+      for(const k of SYNC_KEYS){
+        let rem = null; try{ rem = data[k] != null ? JSON.parse(data[k]) : null; }catch(_){}
+        rawSet(k, JSON.stringify(mergeVal(k, store.get(k, emptyOf(k)), rem))); reloadVar(k);
+        tl[k] = Date.now(); sync.dirty.add(k);
+      }
+      rawSet('hhjoined', JSON.stringify(sync.code)); changed = true;
+    } else {
+      for(const k of SYNC_KEYS){
+        const rt = data['t_' + k] || 0;
+        if(data[k] == null || rt <= (tl[k] || 0)) continue;
+        let val; try{ val = JSON.parse(data[k]); }catch(_){ continue; }
+        if(k === 'done'){ const keep = Object.fromEntries(Object.entries(store.get('done', {})).filter(([x]) => x.startsWith('i:'))); val = Object.assign({}, val, keep); }
+        rawSet(k, JSON.stringify(val)); reloadVar(k); tl[k] = rt; changed = true;
+      }
+    }
+    rawSet('tl', JSON.stringify(tl));
+  } finally { sync.applying = false; }
+  setStatus('ok', '');
+  if(sync.dirty.size) schedulePush();
+  if(changed) softRender();
+}
+function softRender(){
+  const a = document.activeElement;
+  if(a && (a.tagName === 'INPUT' || a.tagName === 'SELECT')){ sync.late = true; return; }
+  const y = scrollY; render(); scrollTo(0, y);
+}
+document.addEventListener('focusout', () => { if(sync.late){ setTimeout(() => { const a = document.activeElement; if(sync.late && !(a && a.tagName === 'INPUT')){ sync.late = false; softRender(); } }, 250); } });
+function friendly(err){
+  const c = (err && err.code) || '';
+  if(c.includes('permission')) return 'Zugriff verweigert. Prüfe die Firestore-Regeln und dass der Code mindestens 8 Zeichen hat.';
+  if(c.includes('not-found') || /does not exist/i.test(err && err.message || '')) return 'Die Datenbank fehlt noch. In Firebase unter „Firestore Database“ eine Datenbank erstellen.';
+  if(c.includes('unavailable')) return 'Gerade offline. Änderungen werden später abgeglichen.';
+  return 'Fehler: ' + ((err && (err.code || err.message)) || 'unbekannt');
+}
+function setStatus(s, msg){
+  sync.status = s; sync.msg = msg || '';
+  const a = document.activeElement;
+  if(route() === '/sync' && !(a && a.tagName === 'INPUT')) render();
+}
+async function syncStart(){
+  syncStop();
+  if(!sync.code){ setStatus('off'); return; }
+  setStatus('connecting');
+  try{
+    const [app, fs] = await Promise.all([import(FB_BASE + 'firebase-app.js'), import(FB_BASE + 'firebase-firestore.js')]);
+    sync.fs = fs;
+    const a = app.getApps().length ? app.getApp() : app.initializeApp(FB_CFG);
+    sync.ref = fs.doc(fs.getFirestore(a), 'haushalte', sync.code);
+    sync.unsub = fs.onSnapshot(sync.ref, onSnap, err => setStatus('error', friendly(err)));
+  }catch(e){ setStatus('error', 'Keine Verbindung zu Firebase. Ohne Internet läuft die App weiter, abgeglichen wird später.'); }
+}
+function syncStop(){ if(sync.unsub){ try{ sync.unsub(); }catch(_){} } sync.unsub = null; sync.ref = null; clearTimeout(sync.timer); }
+function syncConnect(){
+  const v = ($('#hhcode').value || '').trim().toLowerCase();
+  if(!/^[a-z0-9_-]{8,40}$/.test(v)){ sync.status = 'error'; sync.msg = 'Der Code braucht 8 bis 40 Zeichen: Buchstaben (ohne Umlaute), Ziffern, - oder _.'; render(); return; }
+  sync.code = v; store.set('hh', v); syncStart();
+}
+function syncDisconnect(){
+  if(!confirm('Synchronisation beenden? Die Daten bleiben auf diesem Gerät.')) return;
+  syncStop(); sync.code = ''; store.set('hh', ''); rawSet('hhjoined', '""'); sync.status = 'off'; sync.msg = ''; render();
+}
+function viewSync(){
+  const st = {off:['Nicht verbunden','var(--mute)'], connecting:['Verbinde …','var(--warn)'], ok:['Verbunden ✓','var(--ok)'], error:['Fehler','#d4351c']}[sync.status];
+  return `<header class="top"><div class="title">Sync<small>zwischen deinen Geräten</small></div></header>
+    <div class="box" style="margin-top:6px"><h2>Haushalts-Code</h2>
+      <div class="small" style="margin-bottom:10px">Gib auf allen Geräten denselben Code ein. Dann sind Favoriten, Einkaufsliste, eigene Artikel, Haken und Vorrat überall gleich. Wer den Code kennt, sieht diese Daten. Nimm deshalb keinen leicht erratbaren.</div>
+      <input type="text" id="hhcode" value="${esc(sync.code)}" placeholder="z. B. brot-milch-4821" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="40">
+      <div class="row" style="margin-top:10px;gap:8px"><button class="btn sm sp" style="padding:12px" data-sync-on>${sync.code ? 'Code ändern & verbinden' : 'Verbinden'}</button>
+        <button class="btn sm sec" style="padding:12px" data-sync-gen>Code vorschlagen</button></div>
+      <div style="margin-top:14px;font-weight:700;color:${st[1]}">${st[0]}</div>
+      ${sync.msg ? `<div class="small" style="margin-top:4px;color:${sync.status === 'error' ? '#d4351c' : 'var(--mute)'}">${esc(sync.msg)}</div>` : ''}
+      ${sync.code ? `<button class="btn sec" data-sync-off>Synchronisation beenden</button>` : ''}</div>
+    <div class="box"><h2>So geht es</h2><div class="note" style="margin:0">1. Hier einen Code wählen und auf <b>Verbinden</b> tippen.<br>2. Auf dem zweiten Gerät denselben Code eingeben.<br>3. Beim ersten Verbinden werden die Daten beider Geräte zusammengeführt.<br>4. Danach erscheinen Änderungen nach wenigen Sekunden auf dem anderen Gerät. Ohne Internet läuft die App weiter und gleicht später ab.<br>Das Abhaken von Zutaten im Rezept bleibt auf dem Gerät.</div></div>`;
+}
+
 render();
+if(sync.code) syncStart();
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){ navigator.serviceWorker.register('sw.js').catch(() => {}); }
 </script>
 </body>
