@@ -122,6 +122,8 @@ const store = {
 let fav   = new Set(store.get('fav', []));
 let cart  = store.get('cart', []);        // [{id, p}]
 let done  = store.get('done', {});         // {itemKey: true}
+let extra = store.get('extra', []);        // eigene Artikel [{id, t, d}]
+const saveExtra = () => store.set('extra', extra);
 let pantry= store.get('pantry', []);       // ['hähnchen', ...]
 let ui    = Object.assign({q:'', cat:'Alle', sort:'std'}, store.get('ui', {}));
 const portionPref = store.get('portions', {});
@@ -244,6 +246,8 @@ function shoppingText(){
   const g = buildShopping(); let out = 'Einkaufsliste\n';
   for(const s of SEC_ORDER){ if(!g[s]) continue; out += '\n' + s + '\n';
     for(const e of g[s]){ if(done[e.id]) continue; const l = shopLine(e); out += '• ' + (l.qty ? l.qty + ' ' : '') + l.name + '\n'; } }
+  const ex = extra.filter(x => !x.d);
+  if(ex.length){ out += '\nEigene Artikel\n' + ex.map(x => '• ' + x.t).join('\n') + '\n'; }
   return out.trim();
 }
 
@@ -332,7 +336,7 @@ function viewDetail(id){
 }
 
 function viewShop(){
-  const g = buildShopping(); const n = Object.values(g).reduce((a, b) => a + b.length, 0);
+  const g = buildShopping(); const n = Object.values(g).reduce((a, b) => a + b.length, 0) + extra.length;
   const plan = cart.map(c => { const r = byId[c.id]; return `<div class="row" style="padding:8px 0;border-top:1px solid var(--line)">
       <button class="sp" style="text-align:left;font-weight:600" data-go="/r/${c.id}">${esc(r.title)}</button>
       <div class="stepper"><button data-cp="-1" data-id="${c.id}">−</button><b style="min-width:34px">${c.p}</b><button data-cp="1" data-id="${c.id}">+</button></div>
@@ -342,13 +346,18 @@ function viewShop(){
     list += `<div class="sec-h">${esc(s)}</div><div class="box" style="margin-top:0;padding-top:4px;padding-bottom:4px"><ul class="ing">` +
       g[s].map(e => { const l = shopLine(e); const d = !!done[e.id];
         return `<li><label class="ck ${d ? 'done' : ''}"><input type="checkbox" data-shop="${esc(e.id)}" ${d ? 'checked' : ''}><span class="t">${esc(l.name)}</span><span class="qty">${esc(l.qty)}</span></label></li>`; }).join('') + `</ul></div>`; }
+  const own = `<div class="box" style="margin-top:6px"><h2>Eigene Artikel</h2>
+      <div class="row" style="gap:8px"><input type="text" id="xin" class="sp" placeholder="z. B. Brot, Toilettenpapier, Milch …" autocomplete="off" autocapitalize="sentences" enterkeyhint="done" maxlength="80">
+        <button class="btn sm" style="padding:11px 16px" data-xadd aria-label="Hinzufügen">＋</button></div>
+      ${extra.length ? `<ul class="ing" style="margin-top:6px">${extra.map(x => `<li class="row"><label class="ck ${x.d ? 'done' : ''}" style="flex:1"><input type="checkbox" data-xdone="${x.id}" ${x.d ? 'checked' : ''}><span class="t">${esc(x.t)}</span></label>
+        <button data-xdel="${x.id}" aria-label="Löschen" style="color:var(--mute);font-size:20px;padding:4px 8px">✕</button></li>`).join('')}</ul>` : ''}</div>`;
   return `<header class="top"><div class="title">Einkauf<small>${n} Artikel</small></div></header>
-    ${cart.length ? `<div class="box" style="margin-top:6px"><h2>Geplante Gerichte</h2>${plan}
-      <div class="small" style="margin-top:8px">Öl, Salz und Pfeffer sind nicht aufgeführt.</div></div>
-      <div class="row" style="margin-top:14px;gap:8px"><button class="btn sm sp" style="padding:12px" data-share>Liste teilen</button>
-        <button class="btn sm sec" style="padding:12px" data-clear-done>Haken zurücksetzen</button><button class="btn sm sec" style="padding:12px" data-clear>Leeren</button></div>
-      ${list}`
-    : `<div class="empty">Noch nichts geplant.<br>Öffne ein Rezept und tippe auf<br>„Auf die Einkaufsliste“.</div>`}`;
+    ${own}
+    ${cart.length ? `<div class="box"><h2>Geplante Gerichte</h2>${plan}
+      <div class="small" style="margin-top:8px">Öl, Salz und Pfeffer sind nicht aufgeführt.</div></div>` : ''}
+    ${cart.length || extra.length ? `<div class="row" style="margin-top:14px;gap:8px"><button class="btn sm sp" style="padding:12px" data-share>Liste teilen</button>
+        <button class="btn sm sec" style="padding:12px" data-clear-done>Haken zurücksetzen</button><button class="btn sm sec" style="padding:12px" data-clear>Leeren</button></div>${list}` : ''}
+    ${!cart.length && !extra.length ? `<div class="empty">Noch nichts geplant.<br>Schreib oben einen Artikel auf oder öffne ein Rezept und tippe auf<br>„Auf die Einkaufsliste“.</div>` : ''}`;
 }
 
 function viewPantry(){
@@ -391,8 +400,14 @@ window.addEventListener('scroll', () => { const h = document.querySelector('head
 
 /* ---------- Events ---------- */
 const saveCart = () => store.set('cart', cart);
+function addExtra(){
+  const i = $('#xin'); if(!i) return; const v = i.value.trim().replace(/\s+/g, ' ');
+  if(!v){ i.focus(); return; }
+  if(!extra.some(x => x.t.toLowerCase() === v.toLowerCase())) extra.push({id: 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), t: v, d: false});
+  saveExtra(); render(); const n = $('#xin'); if(n) n.focus();
+}
 document.addEventListener('click', async e => {
-  const t = e.target.closest('[data-go],[data-fav],[data-cat],[data-p],[data-cart],[data-cp],[data-cdel],[data-share],[data-clear],[data-clear-done],[data-padd],[data-pdel]');
+  const t = e.target.closest('[data-go],[data-fav],[data-cat],[data-p],[data-cart],[data-cp],[data-cdel],[data-share],[data-clear],[data-clear-done],[data-padd],[data-pdel],[data-xadd],[data-xdel]');
   if(!t) return;
   const d = t.dataset;
   if(d.fav){ e.stopPropagation(); e.preventDefault(); fav.has(d.fav) ? fav.delete(d.fav) : fav.add(d.fav); store.set('fav', [...fav]); const y = scrollY; render(); scrollTo(0, y); return; }
@@ -402,8 +417,10 @@ document.addEventListener('click', async e => {
   if(d.cart){ const p = portionPref[d.cart] || 4, c = cart.find(x => x.id === d.cart); c ? c.p = p : cart.push({id:d.cart, p}); saveCart(); toast(p + ' Portionen auf der Einkaufsliste'); const y = scrollY; render(); scrollTo(0, y); return; }
   if(d.cp){ const c = cart.find(x => x.id === d.id); c.p = Math.min(24, Math.max(1, c.p + +d.cp)); saveCart(); render(); return; }
   if(d.cdel){ cart = cart.filter(x => x.id !== d.cdel); saveCart(); render(); return; }
-  if(d.clear !== undefined){ if(confirm('Einkaufsliste komplett leeren?')){ cart = []; done = {}; saveCart(); store.set('done', done); render(); } return; }
-  if(d.clearDone !== undefined){ for(const k of Object.keys(done)) if(!k.startsWith('i:')) delete done[k]; store.set('done', done); toast('Haken zurückgesetzt'); render(); return; }
+  if(d.xadd !== undefined){ addExtra(); return; }
+  if(d.xdel){ extra = extra.filter(x => x.id !== d.xdel); saveExtra(); const y = scrollY; render(); scrollTo(0, y); return; }
+  if(d.clear !== undefined){ if(confirm('Einkaufsliste komplett leeren? Gerichte und eigene Artikel werden entfernt.')){ cart = []; extra = []; done = {}; saveCart(); saveExtra(); store.set('done', done); render(); } return; }
+  if(d.clearDone !== undefined){ for(const k of Object.keys(done)) if(!k.startsWith('i:')) delete done[k]; extra.forEach(x => x.d = false); saveExtra(); store.set('done', done); toast('Haken zurückgesetzt'); render(); return; }
   if(d.share !== undefined){ const txt = shoppingText();
     if(navigator.share){ try{ await navigator.share({title:'Einkaufsliste', text:txt}); }catch(_){} }
     else { try{ await navigator.clipboard.writeText(txt); toast('Liste kopiert'); }catch(_){ prompt('Liste kopieren:', txt); } } return; }
@@ -412,7 +429,8 @@ document.addEventListener('click', async e => {
 });
 document.addEventListener('change', e => {
   const t = e.target;
-  if(t.dataset.shop){ t.checked ? done[t.dataset.shop] = true : delete done[t.dataset.shop]; store.set('done', done); const y = scrollY; render(); scrollTo(0, y); }
+  if(t.dataset.xdone){ const x = extra.find(y => y.id === t.dataset.xdone); if(x){ x.d = t.checked; saveExtra(); t.closest('label').classList.toggle('done', t.checked); } }
+  else if(t.dataset.shop){ t.checked ? done[t.dataset.shop] = true : delete done[t.dataset.shop]; store.set('done', done); const y = scrollY; render(); scrollTo(0, y); }
   else if(t.dataset.ing){ const [id, n] = t.dataset.ing.split(':'); const k = 'i:' + id + ':' + n; t.checked ? done[k] = true : delete done[k]; store.set('done', done); t.closest('label').classList.toggle('done', t.checked); }
   else if(t.id === 'sort'){ ui.sort = t.value; saveUi(); render(); }
 });
@@ -420,6 +438,7 @@ document.addEventListener('input', e => {
   if(e.target.id === 'q'){ ui.q = e.target.value; saveUi(); const rs = filtered(); $('#cards').innerHTML = cardsHtml(rs); $('#cnt').textContent = rs.length + ' Treffer'; }
 });
 document.addEventListener('keydown', e => {
+  if(e.target.id === 'xin' && e.key === 'Enter'){ e.preventDefault(); addExtra(); return; }
   if(e.target.id === 'pin' && e.key === 'Enter'){ const v = e.target.value.trim().toLowerCase(); if(v && !pantry.includes(v)){ pantry.push(v); store.set('pantry', pantry); } render(); const i = $('#pin'); if(i) i.focus(); }
 });
 document.addEventListener('change', e => { if(e.target.id === 'pin'){ const v = e.target.value.trim().toLowerCase(); if(v && !pantry.includes(v)){ pantry.push(v); store.set('pantry', pantry); render(); } } });
