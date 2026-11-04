@@ -475,7 +475,7 @@ function flushPush(){
     if(k === 'done'){ try{ s = JSON.stringify(outDone(JSON.parse(s))); }catch(_){} }
     o[k] = s; o['t_' + k] = tl[k] || Date.now();
   }
-  Promise.resolve(sync.fs.setDoc(sync.ref, o, {merge: true})).catch(err => { ks.forEach(k => sync.dirty.add(k)); setStatus('error', friendly(err)); });
+  Promise.resolve(sync.fs.setDoc(sync.ref, o, {merge: true})).catch(err => { ks.forEach(k => sync.dirty.add(k)); setStatus('error', friendly(err) + ' [' + ((err && err.code) || '') + ']'); });
 }
 function mergeVal(k, loc, rem){
   if(rem == null) return loc;
@@ -539,14 +539,15 @@ async function syncStart(){
     const [app, fs] = await Promise.all([import(FB_BASE + 'firebase-app.js'), import(FB_BASE + 'firebase-firestore.js')]);
     sync.fs = fs;
     const a = app.getApps().length ? app.getApp() : app.initializeApp(FB_CFG);
-    sync.ref = fs.doc(fs.getFirestore(a), 'haushalte', sync.code);
-    sync.unsub = fs.onSnapshot(sync.ref, onSnap, err => setStatus('error', friendly(err)));
-  }catch(e){ setStatus('error', 'Keine Verbindung zu Firebase. Ohne Internet läuft die App weiter, abgeglichen wird später.'); }
+    let db; try{ db = fs.initializeFirestore(a, {experimentalAutoDetectLongPolling: true, useFetchStreams: false}); }catch(_){ db = fs.getFirestore(a); }
+    sync.ref = fs.doc(db, 'haushalte', sync.code);
+    sync.unsub = fs.onSnapshot(sync.ref, onSnap, err => setStatus('error', friendly(err) + ' [' + ((err && err.code) || '') + ']'));
+  }catch(e){ setStatus('error', 'Firebase konnte nicht geladen werden (' + ((e && e.message) || e) + '). Prüfe die Internetverbindung und starte die App neu.'); }
 }
 function syncStop(){ if(sync.unsub){ try{ sync.unsub(); }catch(_){} } sync.unsub = null; sync.ref = null; clearTimeout(sync.timer); }
 function syncConnect(){
-  const v = ($('#hhcode').value || '').trim().toLowerCase();
-  if(!/^[a-z0-9_-]{8,40}$/.test(v)){ sync.status = 'error'; sync.msg = 'Der Code braucht 8 bis 40 Zeichen: Buchstaben (ohne Umlaute), Ziffern, - oder _.'; render(); return; }
+  let v = ($('#hhcode').value || '').trim().toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/\s+/g,'-').replace(/[^a-z0-9_-]/g,'').slice(0,40);
+  if(v.length < 8){ sync.status = 'error'; sync.msg = 'Der Code ist zu kurz (mindestens 8 Zeichen). Tippe auf „Code vorschlagen“.'; render(); return; }
   sync.code = v; store.set('hh', v); syncStart();
 }
 function syncDisconnect(){
