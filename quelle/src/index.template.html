@@ -252,6 +252,70 @@ function shoppingText(){
 }
 
 /* ---------- Vorrat / Resteverwertung ---------- */
+/* Begriffsketten: vom Speziellen zum Allgemeinen. Zwei Begriffe passen, wenn der speziellste Begriff des einen in der Kette des anderen steht. */
+const CHAINS = [
+  [/fr(ü|ue)hlingszwiebel|lauchzwiebel/, ['frühlingszwiebel']],
+  [/zwiebelpulver/, ['zwiebelpulver']],
+  [/zwiebel/, ['zwiebel']],
+  [/knoblauch(?!pulver)/, ['knoblauch']],
+  [/tomatenso(ß|ss)e|tomatensauce|passata|passierte|gehackte tomaten|stückige|pizzatomaten|dosentomaten|pizzasauce|pizzasoße|tomatenpüree|sugo|pomodoro/, ['tomatensauce']],
+  [/tomatenmark/, ['tomatenmark']],
+  [/tomate/, ['tomate']],
+  [/saure sahne|schmand|cr(è|e)me fra(î|i)che|sauerrahm/, ['saure sahne']],
+  [/kochsahne/, ['kochsahne', 'sahne']],
+  [/sahne|cremefine|rahm/, ['sahne']],
+  [/hüttenkäse|körniger/, ['hüttenkäse', 'frischkäse']],
+  [/frischkäse/, ['frischkäse']],
+  [/mozzarella/, ['mozzarella', 'käse']],
+  [/parmesan|grana/, ['parmesan', 'käse']],
+  [/feta|hirtenkäse/, ['feta', 'käse']],
+  [/gouda|ka(ş|s)ar|cheddar|emmentaler|edamer|bergkäse|gruy(è|e)re|tilsiter|maasdam|butterkäse/, ['schnittkäse', 'käse']],
+  [/käse|kaese|streukäse|reibekäse/, ['käse']],
+  [/hack(?![te])|faschiert|gehacktes/, ['hack']],
+  [/hähnchen|hühnchen|huhn\b|hühnerbrust|chicken|geflügel/, ['hähnchen']],
+  [/gemüsebrühe|gemüsefond/, ['gemüsebrühe', 'brühe']],
+  [/hühnerbrühe|hühnerfond|hühnchenbrühe/, ['hühnerbrühe', 'brühe']],
+  [/brühe|bouillon|fond\b/, ['brühe']],
+  [/spätzle/, ['spätzle']],
+  [/tortellini/, ['tortellini']],
+  [/lasagne/, ['lasagne']],
+  [/makkaroni/, ['makkaroni', 'nudeln']],
+  [/orzo|kritharaki/, ['orzo', 'nudeln']],
+  [/nudel|pasta|spaghetti|penne|fusilli|tagliatelle|rigatoni|farfalle|girandole|bandnudeln/, ['nudeln']],
+  [/reisessig/, ['reisessig']],
+  [/\breis\b|basmati|jasmin/, ['reis']],
+  [/kartoffel|erdäpfel/, ['kartoffel']],
+  [/paprika(?!pulver|\s*(edelsüß|geräuchert))/, ['paprika']],
+  [/skyr/, ['skyr']],
+  [/quark/, ['quark']],
+  [/joghurt|jogurt/, ['joghurt']],
+  [/sojaso(ß|ss)e|sojasauce|soja-sauce|soja sauce/, ['sojasauce']],
+  [/\beier?\b/, ['ei']],
+  [/mehl/, ['mehl']],
+  [/salami/, ['salami']],
+  [/pancetta|schinken|speck/, ['schinken']],
+  [/karotte|möhre|mohrrübe/, ['möhre']],
+  [/kidney/, ['kidneybohnen']],
+  [/brokkoli|broccoli/, ['brokkoli']],
+  [/spinat/, ['spinat']],
+  [/gurke/, ['gurke']],
+  [/avocado/, ['avocado']],
+  [/banane/, ['banane']],
+  [/thunfisch/, ['thunfisch']],
+  [/\bmilch\b/, ['milch']],
+  [/butter(?!milch)/, ['butter']],
+  [/haferflocken/, ['haferflocken']],
+  [/zucchini/, ['zucchini']],
+];
+const chainOf = s => { s = s.toLowerCase(); for(const [re, ch] of CHAINS) if(re.test(s)) return ch; return null; };
+function pantryHas(i){
+  const k = keyOf(i.name), ci = chainOf(baseName(i.name));
+  return pantry.some(t => {
+    const ct = chainOf(t);
+    if(ci && ct) return ct.includes(ci[0]) || ci.includes(ct[0]);
+    return matchTerm(k, t) || matchTerm(i.name.toLowerCase(), t);
+  });
+}
 const matchTerm = (key, t) => t.length >= 2 && (key === t || (t.length >= 3 && (key.includes(t) || (key.length >= 4 && t.includes(key)))));
 function pantryScore(r){
   const need = [], have = [], miss = [];
@@ -261,7 +325,7 @@ function pantryScore(r){
     if(sec === 'Backen & Würzen' && !(MASS.has(i.unit) && i.qty >= 20)) continue;  // Gewürze zählen nicht
     if(i.qty == null && /zum garnieren|basilikum|petersilie|kräuter|lorbeer|salat/i.test(i.name)) continue;
     need.push(i);
-    (pantry.some(t => matchTerm(k, t) || matchTerm(i.name.toLowerCase(), t)) ? have : miss).push(i);
+    (pantryHas(i) ? have : miss).push(i);
   }
   return {need, have, miss, pct: need.length ? have.length / need.length : 0};
 }
