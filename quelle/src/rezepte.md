@@ -706,3 +706,92 @@ Zubereitung:
 6. Alternativ im Ofen oder Airfryer garen, bis innen 74 °C erreicht sind.
 
 Anpassungen: Amerikanische Maße (Cups, Löffel) in Gramm umgerechnet. 165 °F Kerntemperatur entspricht 74 °C.
+
+## r27 · Hähnchen-Sahne-Geschnetzeltes mit Reis & Brokkoli
+Kategorie: Mittag, Abend · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Tag 1“) · Original: 4 Portionen
+Nährwerte/Portion: 584 kcal · 45 g E · 61 g KH · 17 g F (Creator: 48 g E · 55 g KH · 18 g F)
+
+Zutaten:
+- 600 g Hähnchenbrust
+- 400 g Brokkoli
+- 250 g Reis (roh)
+- 200 ml Kochsahne 15 %
+- 100 g Frischkäse light
+- ½ Zwiebel (ca. 40 g)
+- 1 Knoblauchzehe (ca. 3 g)
+- 1 EL Öl (ca. 10 ml)
+- 1 TL Gemüsebrühe (Pulver)
+- Salz
+- Pfeffer
+- 1 TL Paprikapulver ≈
+- Petersilie (zum Garnieren)
+
+Zubereitung:
+1. Reis nach Packungsanleitung in Salzwasser garen.
+2. Brokkoli in Röschen teilen und ca. 5–7 Minuten in leicht gesalzenem Wasser garen.
+3. Hähnchenbrust in Streifen schneiden und mit Salz, Pfeffer und Paprikapulver würzen.
+4. Öl in einer Pfanne erhitzen, Hähnchenstreifen rundum anbraten, Zwiebel und Knoblauch fein würfeln und kurz mitbraten.
+5. Kochsahne, Frischkäse und Gemüsebrühe einrühren und ca. 5 Minuten köcheln lassen.
+6. Mit Salz, Pfeffer und Kräutern abschmecken, mit Reis und Brokkoli servieren und mit Petersilie garnieren.
+
+Anpassungen: Zwiebel halbiert (wenig Zwiebel). Paprikapulver ohne Mengenangabe im Original, 1 TL geschätzt. Gesamtzeit laut Creator ca. 30 Minuten.
+
+## r28 · Kartoffel-Hack-Auflauf mit Käse überbacken
+Kategorie: Mittag, Abend · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Tag 2“) · Original: 4 Portionen
+Nährwerte/Portion: 736 kcal · 41 g E · 55 g KH · 38 g F (Creator: 37 g E · 55 g KH · 28 g F)
+
+Zutaten:
+- 1 kg Kartoffeln
+- 500 g Rinderhackfleisch
+- ½ Zwiebel (ca. 40 g)
+- 1 Knoblauchzehe (ca. 3 g)
+- 2 EL Tomatenmark (ca. 30 g)
+- 500 g passierte Tomaten
+- 200 ml Kochsahne 15 %
+- 150 g geriebener Käse
+- 1 TL Gemüsebrühe (Pulver)
+- 1 TL Paprikapulver ≈
+- 1 TL Oregano ≈
+- Salz
+- Pfeffer
+- 1 TL Öl zum Einfetten ≈
+
+Zubereitung:
+1. Kartoffeln schälen, in dünne Scheiben schneiden und ca. 5 Minuten in Salzwasser vorkochen.
+2. Zwiebel und Knoblauch fein hacken, Hackfleisch in einer Pfanne krümelig anbraten und die Zwiebel mitbraten.
+3. Tomatenmark einrühren und kurz anrösten, passierte Tomaten und Gemüsebrühe dazugeben. Mit Paprikapulver, Oregano, Salz und Pfeffer abschmecken und ca. 5 Minuten köcheln.
+4. Eine Auflaufform leicht einfetten und Kartoffelscheiben und Hackfleischsoße abwechselnd einschichten.
+5. Kochsahne darübergießen und mit geriebenem Käse bestreuen.
+6. Im vorgeheizten Ofen bei 180 °C Ober-/Unterhitze ca. 25–30 Minuten goldbraun überbacken.
+
+Anpassungen: Zwiebel halbiert (wenig Zwiebel). Menge von Paprikapulver und Oregano geschätzt. Nährwerte mit Rinderhack (ca. 15 % Fett) und normalem Käse gerechnet; die Creator-Angabe (28 g Fett) passt eher zu Light-Zutaten. Mit fettreduziertem Hack und Light-Käse sind es ca. 580 kcal und 19 g Fett pro Portion. Gesamtzeit laut Creator ca. 45 Minuten.
+
+## r29 · Tomaten-Mozzarella-Pasta
+Kategorie: Mittag, Abend · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Tag 3“) · Original: 4 Portionen
+Nährwerte/Portion: 774 kcal · 31 g E · 106 g KH · 24 g F (Creator: 24 g E · 72 g KH · 20 g F)
+
+Zutaten:
+- 500 g Nudeln (z. B. Penne, roh)
+- 400 g passierte Tomaten
+- 250 g Cherrytomaten
+- 250 g Mozzarella
+- 200 ml Kochsahne 15 %
+- ½ Zwiebel (ca. 40 g)
+- 2 Knoblauchzehen (ca. 6 g)
+- 2 EL Tomatenmark (ca. 30 g)
+- 1 TL italienische Kräuter (z. B. Oregano, Basilikum)
+- Salz
+- Pfeffer
+- 1 EL Olivenöl
+- 20 g Parmesan (optional) ≈
+
+Zubereitung:
+1. Nudeln nach Packungsanleitung in Salzwasser al dente kochen.
+2. Zwiebel und Knoblauch fein würfeln und in einem großen Topf mit etwas Öl glasig anbraten.
+3. Tomatenmark kurz mitrösten, dann die passierten Tomaten und die Kochsahne einrühren.
+4. Mit Salz, Pfeffer und den italienischen Kräutern würzen und ca. 10 Minuten leicht köcheln lassen.
+5. Cherrytomaten halbieren und in die Sauce geben, weitere 5 Minuten köcheln lassen.
+6. Mozzarella in kleine Stücke reißen und unter die Sauce heben, bis er leicht geschmolzen ist.
+7. Die fertigen Nudeln abgießen und mit der Sauce vermengen. Nach Belieben mit Parmesan bestreuen.
+
+Anpassungen: Zwiebel halbiert (wenig Zwiebel). Parmesan war „nach Belieben“, Menge geschätzt und nicht in den Nährwerten. 500 g rohe Nudeln sind 125 g pro Portion, das ist viel: Die Creator-Werte passen zu ca. 320 g Nudeln (80 g pro Portion). Damit sind es ca. 607 kcal, 25 g E, 72 g KH, 23 g F pro Portion. Die kcal-Angabe des Creators ist im Bild abgeschnitten. Gesamtzeit laut Creator ca. 25 Minuten.
