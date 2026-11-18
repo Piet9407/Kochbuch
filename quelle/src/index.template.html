@@ -336,7 +336,7 @@ function allIngredientNames(){
 }
 
 /* ---------- Views ---------- */
-const CATS = ['Alle', 'Frühstück', 'Mittag', 'Abend', '♥ Favoriten'];
+const CATS = ['Alle', 'Frühstück', 'Mittag', 'Abend', 'Airfryer', '♥ Favoriten'];
 function matches(r){
   if(ui.cat === '♥ Favoriten' && !fav.has(r.id)) return false;
   if(ui.cat !== 'Alle' && ui.cat !== '♥ Favoriten' && !r.cats.includes(ui.cat)) return false;

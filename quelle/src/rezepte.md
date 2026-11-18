@@ -263,7 +263,7 @@ Zubereitung:
 Anpassungen: Zwiebel halbiert (wenig Zwiebel).
 
 ## r10 · Chicken Tenders aus dem Airfryer
-Kategorie: Mittag, Abend · Gruppe: – · Quelle: @meal.assassin (Instagram, https://www.instagram.com/reel/Dee7iYVx3SX/) · Original: keine Angabe
+Kategorie: Mittag, Abend, Airfryer · Gruppe: – · Quelle: @meal.assassin (Instagram, https://www.instagram.com/reel/Dee7iYVx3SX/) · Original: keine Angabe
 Nährwerte/Portion: 355 kcal · 43 g E · 28 g KH · 7 g F
 
 Zutaten:
@@ -342,7 +342,7 @@ Zubereitung (aus Video abgeleitet):
 Anpassungen: Chiliflocken weggelassen (nicht scharf). Tipp: Mit Kochsahne 7 % statt Sahne und Light-Hack sparst du ca. 250 kcal pro Portion.
 
 ## r13 · Korean Popcorn Chicken (mild)
-Kategorie: Abend · Gruppe: – · Quelle: @proteinprepper (Original: recipeincaption) (Instagram, https://www.instagram.com/reel/De4MJfIteLh/) · Original: 2 lb Hähnchen (≈ 4 Portionen)
+Kategorie: Abend, Airfryer · Gruppe: – · Quelle: @proteinprepper (Original: recipeincaption) (Instagram, https://www.instagram.com/reel/De4MJfIteLh/) · Original: 2 lb Hähnchen (≈ 4 Portionen)
 Nährwerte/Portion: 613 kcal · 51 g E · 38 g KH · 28 g F
 
 Zutaten:
@@ -797,7 +797,7 @@ Zubereitung:
 Anpassungen: Zwiebel halbiert (wenig Zwiebel). Parmesan war „nach Belieben“, Menge geschätzt und nicht in den Nährwerten. 500 g rohe Nudeln sind 125 g pro Portion, das ist viel: Die Creator-Werte passen zu ca. 320 g Nudeln (80 g pro Portion). Damit sind es ca. 607 kcal, 25 g E, 72 g KH, 23 g F pro Portion. Die kcal-Angabe des Creators ist im Bild abgeschnitten. Gesamtzeit laut Creator ca. 25 Minuten.
 
 ## r30 · Gefüllte Paprika aus dem Airfryer
-Kategorie: Mittag, Abend · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Rezept 3“) · Original: 4 Portionen
+Kategorie: Mittag, Abend, Airfryer · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Rezept 3“) · Original: 4 Portionen
 Nährwerte/Portion: 454 kcal · 28 g E · 29 g KH · 25 g F
 
 Zutaten:
@@ -828,7 +828,7 @@ Zubereitung:
 Anpassungen: Zwiebel halbiert (wenig Zwiebel). Die Größe der Dose gewürfelte Tomaten („kleine Dose“) und das Gewicht der Paprika sind geschätzt. Nährwerte mit Rinderhack (ca. 15 % Fett) und inklusive der optionalen Paprika gerechnet. Das Foto zeigt überbackenen Käse, in den Zutaten steht aber keiner: Bei Bedarf ca. 80 g geriebenen Käse obenauf geben (ca. +110 kcal pro Portion). Die Creator-Seite nennt keine Nährwerte.
 
 ## r31 · Schinken-Käse-Toast aus dem Airfryer
-Kategorie: Mittag, Abend · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Rezept 2“) · Original: 2 Portionen, verdoppelt
+Kategorie: Mittag, Abend, Airfryer · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Rezept 2“) · Original: 2 Portionen, verdoppelt
 Nährwerte/Portion: 445 kcal · 23 g E · 31 g KH · 26 g F
 
 Zutaten:
@@ -850,7 +850,7 @@ Zubereitung:
 Anpassungen: Original für 2 Portionen, auf 4 verdoppelt (1 Portion = 1 Toast aus 2 Brotscheiben). Gewicht der Käse- und Schinkenscheiben geschätzt. Variationen laut Creator: Salami, Putenbrust oder anderer Aufschnitt statt Schinken, dazu Tomatenscheiben, Paprika oder Frischkäse. Die Creator-Seite nennt keine Nährwerte.
 
 ## r32 · Kartoffel-Schinken-Schiffchen aus dem Airfryer
-Kategorie: Mittag, Abend · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Rezept 1“) · Original: 4 Portionen
+Kategorie: Mittag, Abend, Airfryer · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Rezept 1“) · Original: 4 Portionen
 Nährwerte/Portion: 622 kcal · 24 g E · 40 g KH · 40 g F
 
 Zutaten:
