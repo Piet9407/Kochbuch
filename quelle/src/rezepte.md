@@ -795,3 +795,84 @@ Zubereitung:
 7. Die fertigen Nudeln abgießen und mit der Sauce vermengen. Nach Belieben mit Parmesan bestreuen.
 
 Anpassungen: Zwiebel halbiert (wenig Zwiebel). Parmesan war „nach Belieben“, Menge geschätzt und nicht in den Nährwerten. 500 g rohe Nudeln sind 125 g pro Portion, das ist viel: Die Creator-Werte passen zu ca. 320 g Nudeln (80 g pro Portion). Damit sind es ca. 607 kcal, 25 g E, 72 g KH, 23 g F pro Portion. Die kcal-Angabe des Creators ist im Bild abgeschnitten. Gesamtzeit laut Creator ca. 25 Minuten.
+
+## r30 · Gefüllte Paprika aus dem Airfryer
+Kategorie: Mittag, Abend · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Rezept 3“) · Original: 4 Portionen
+Nährwerte/Portion: 454 kcal · 28 g E · 29 g KH · 25 g F
+
+Zutaten:
+- 4 große Paprikaschoten (z. B. rot, gelb) (ca. 800 g)
+- 500 g Rinderhackfleisch
+- 150 g Reis (vorgekocht)
+- ½ Zwiebel (ca. 40 g)
+- 2 Knoblauchzehen (ca. 6 g)
+- 1 kleine Dose gewürfelte Tomaten (ca. 240 g) ≈
+- 1 rote Paprika (gewürfelt, optional) (ca. 200 g)
+- 2 EL Olivenöl (ca. 20 ml)
+- 1 TL Paprikapulver
+- 1 TL Oregano oder Thymian
+- Salz
+- Pfeffer
+- Frische Kräuter (z. B. Petersilie/Thymian)
+
+Zubereitung:
+1. Airfryer auf 180 °C vorheizen.
+2. Paprika waschen, oben einen Deckel abschneiden und die Kerne entfernen.
+3. Zwiebel und Knoblauch fein hacken.
+4. Hackfleisch, vorgekochten Reis, Tomaten, Zwiebel, Knoblauch und (optional) gewürfelte Paprika in einer Schüssel vermischen.
+5. Mit Paprikapulver, Oregano/Thymian, Salz, Pfeffer und Olivenöl würzen und gut verrühren.
+6. Die Paprika großzügig mit der Mischung füllen.
+7. In den Airfryer setzen und ca. 20 Minuten bei 180 °C garen.
+8. Mit frischen Kräutern toppen und genießen.
+
+Anpassungen: Zwiebel halbiert (wenig Zwiebel). Die Größe der Dose gewürfelte Tomaten („kleine Dose“) und das Gewicht der Paprika sind geschätzt. Nährwerte mit Rinderhack (ca. 15 % Fett) und inklusive der optionalen Paprika gerechnet. Das Foto zeigt überbackenen Käse, in den Zutaten steht aber keiner: Bei Bedarf ca. 80 g geriebenen Käse obenauf geben (ca. +110 kcal pro Portion). Die Creator-Seite nennt keine Nährwerte.
+
+## r31 · Schinken-Käse-Toast aus dem Airfryer
+Kategorie: Mittag, Abend · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Rezept 2“) · Original: 2 Portionen, verdoppelt
+Nährwerte/Portion: 445 kcal · 23 g E · 31 g KH · 26 g F
+
+Zutaten:
+- 8 Scheiben Sandwichbrot (je ca. 30 g)
+- 4 EL weiche Butter (ca. 56 g)
+- 8 Scheiben Käse (z. B. Gouda, Emmentaler oder Cheddar) (je ca. 20 g) ≈
+- 8 Scheiben Kochschinken (je ca. 20 g) ≈
+- 2 TL Dijon-Senf (optional)
+- Pfeffer
+
+Zubereitung:
+1. Brotscheiben außen dünn mit Butter bestreichen.
+2. Die Innenseiten nach Wunsch mit Senf bestreichen.
+3. Je 2 Scheiben Käse und Schinken (oder anderen Aufschnitt) zwischen zwei Brotscheiben legen. Mit etwas Pfeffer würzen.
+4. Die Toasts in den Airfryer geben.
+5. Bei 180 °C ca. 6–8 Minuten goldbraun backen. Nach der Hälfte der Zeit vorsichtig wenden.
+6. Halbieren und warm genießen.
+
+Anpassungen: Original für 2 Portionen, auf 4 verdoppelt (1 Portion = 1 Toast aus 2 Brotscheiben). Gewicht der Käse- und Schinkenscheiben geschätzt. Variationen laut Creator: Salami, Putenbrust oder anderer Aufschnitt statt Schinken, dazu Tomatenscheiben, Paprika oder Frischkäse. Die Creator-Seite nennt keine Nährwerte.
+
+## r32 · Kartoffel-Schinken-Schiffchen aus dem Airfryer
+Kategorie: Mittag, Abend · Gruppe: – · Quelle: @glueck.in.schritten (Instagram, „Rezept 1“) · Original: 4 Portionen
+Nährwerte/Portion: 622 kcal · 24 g E · 40 g KH · 40 g F
+
+Zutaten:
+- 800 g Kartoffeln (vorwiegend festkochend)
+- 200 g Kochschinken
+- 3 Knoblauchzehen (ca. 9 g)
+- 150 g Gouda
+- 2 EL Mayonnaise (ca. 30 g)
+- 200 g Crème fraîche
+- 1 Bund Schnittlauch
+- 3 EL Öl (ca. 30 ml)
+- 4 TL Pommesgewürz (mild)
+- Salz
+- Pfeffer
+
+Zubereitung:
+1. Kartoffeln schälen und in 1–2 cm große Würfel schneiden. Schinken würfeln, Knoblauch hacken, Gouda reiben und Schnittlauch schneiden.
+2. Schinken, Knoblauch, Gouda, Mayonnaise und Crème fraîche verrühren. Mit Salz und Pfeffer würzen.
+3. Kartoffeln mit Öl und Pommesgewürz vermengen.
+4. Vier kleine Schiffchen aus Backpapier formen und die Kartoffeln darin verteilen.
+5. Im Airfryer bei 200 °C ca. 15–20 Minuten goldbraun backen.
+6. Die Schinken-Käse-Mischung darauf verteilen und weitere ca. 5 Minuten überbacken.
+7. Mit Schnittlauch garnieren und genießen.
+
+Anpassungen: Pommesgewürz „Hot & Spicy“ (scharf) durch mildes Pommesgewürz ersetzt, Menge 4 statt 4–5 TL. Backpapier für die Schiffchen nicht in der Zutatenliste geführt. Das Gericht ist reichhaltig (viel Crème fraîche, Gouda und Mayonnaise): Mit Light-Crème-fraîche und Light-Käse sinken die Kalorien deutlich. Gesamtzeit laut Creator ca. 20–25 Minuten. Die Creator-Seite nennt keine Nährwerte.
